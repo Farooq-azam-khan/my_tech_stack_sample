@@ -1,7 +1,12 @@
 from fastapi import APIRouter 
 from schema import LoginUser 
 
-router = APIRouter()
+router = APIRouter(
+  prefix='/user', 
+  tags=['user'], 
+  dependencies=[], 
+  responses={404: ['description': 'Not Found']}
+)
 
 @router.get('/user', tage=['users'])
 async def get_user():
