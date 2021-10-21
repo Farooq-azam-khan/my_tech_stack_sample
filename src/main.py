@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List 
-from pydantic import BaseModel 
-import pandas as pd 
 
-from src.users.router import router as user_router
+
+from src.user.routes import router as user_router
 app = FastAPI()
 
 frontend_app_port: int = 3000 
