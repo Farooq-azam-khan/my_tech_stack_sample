@@ -1,3 +1,14 @@
+# My ignores 
+build.css
+elm.js 
+
+# elm ignores
+elm-stuff
+
+# js ignores
+node_modules
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
