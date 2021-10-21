@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+        <title>App</title>
+        <link rel="stylesheet" href="build.css"/>
+        <script src="elm.js"></script>
+    </head>
+    <body>
+        <div id="elm-app"></div>
+        <script>
+            const node = document.querySelector('#elm-app')
+            if (node) {
+                const app = Elm.Main.init({
+                    node 
+                })
+            }
+        </script>
+    </body>
+</html>
