@@ -1,0 +1,18 @@
+{
+  "name": "UI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:elm": "elm-live -p 3000 src/Main.elm -- --debug --output=elm.js", 
+    "dev:tailwind": "tailwindcss -i tailwind.css -o build.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.3.7",
+    "postcss": "^8.3.10",
+    "tailwindcss": "^2.2.17"
+  }
+}
