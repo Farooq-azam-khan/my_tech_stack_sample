@@ -1,38 +1,57 @@
-module Main exposing (..) 
+module Main exposing (..)
+
+import Actions exposing (Msg(..), onUrlChange, onUrlRequest)
+import Browser
+import Browser.Navigation as Nav
 import Html exposing (..)
-import Browser 
-import Http 
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Json.Decode as D 
-import Json.Encode as E 
+import Routes exposing (Route(..), routeParser)
+import Types exposing (..)
+import Updates exposing (update)
+import Url
+import Url.Parser exposing (parse)
+import View exposing (viewPage)
 
--- MAIN 
-main : Program () Model Msg 
-main = Browser.document 
-    {init = init, view = view, update = update, subscriptions = subs}
-subs _ = Sub.none 
--- MODEL
-type alias Model = 
-    {}
 
--- MSG 
-type Msg 
-    = NoOp 
+main : Program () Model Msg
+main =
+    Browser.application
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subs
+        , onUrlChange = onUrlChange
+        , onUrlRequest = onUrlRequest
+        }
+
+
+subs : a -> Sub msg
+subs _ =
+    Sub.none
+
 
 
 -- INIT
-init : () -> (Model, Cmd Msg)
-init _ = ({}, getCustomers)
-
--- UPDATE 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model = 
-    case msg of 
-        NoOp -> (model, Cmd.none)
-        
 
 
---  VIEW 
-view : Model -> Browser.Document Msg 
-view model = {title = "App", body = [div [] []]} 
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
+    ( { login_form = Just (LoginForm "asd" "asdf")
+      , url = url
+      , key = key
+      , route = parse routeParser url
+      }
+    , Cmd.none
+    )
+
+
+
+--  VIEW
+
+
+view : Model -> Browser.Document Msg
+view model =
+    { title = "App"
+    , body = [ viewPage model ]
+    }

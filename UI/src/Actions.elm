@@ -1,18 +1,34 @@
 module Actions exposing (..)
 
 -- standard imports
-import Http 
+-- vendor imports
+-- custom imports
 
--- vendor imports 
-import RemoteData exposing (..)
+import Browser
+import Http
 import Http.Detailed
-
--- custom imports 
+import RemoteData exposing (..)
 import Types exposing (..)
+import Url
 
 
--- MSG 
-type Msg 
-    = GetWebDataExample (WebData (List Todo))
-    | NoOp
-    | GetDetailedErrorActionExample (RemoteData (Http.Detailed.Error String) (Http.Metadata, Bool))
+
+-- MSG
+
+
+onUrlRequest : Browser.UrlRequest -> Msg
+onUrlRequest req =
+    LinkClicked req
+
+
+onUrlChange : Url.Url -> Msg
+onUrlChange url =
+    UrlChanged url
+
+
+type Msg
+    = NoOp
+    | LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
+    | GetWebDataExample (WebData (List Todo))
+    | GetDetailedErrorActionExample (RemoteData (Http.Detailed.Error String) ( Http.Metadata, Bool ))

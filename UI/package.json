@@ -1,0 +1,25 @@
+{
+  "name": "UI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "dev:elm": "elm-live -p 3000 src/Main.elm --pushstate -- --debug --output=elm.js",
+    "dev:tailwind": "tailwindcss -i tailwind.css -o build.css --watch",
+    "build:elm": "elm make src/Main.elm --output=build/elm.js --optimize",
+    "build:tailwind": "tailwindcss -i tailwind.css -o build/build.css --minify",
+    "build": "mkdir build & cp index.html build & npm run build:tailwind & npm run build:elm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "elm": "^0.19.1-5",
+    "elm-format": "^0.8.5",
+    "elm-live": "^4.0.2",
+    "tailwindcss": "^3.0.7"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.3.4"
+  }
+}
