@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 from src.user.routes import router as user_router
+
 app = FastAPI()
 
 frontend_app_port: int = 3000 
