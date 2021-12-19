@@ -15,6 +15,13 @@ from passlib.context import CryptContext
 # custom imports
 from .schema import Token, TokenData, User, UserInDB
 
+# to get a string like this run:
+# openssl rand -hex 32
+# TODO: hide them in a .env folder
+SECRET_KEY = "xyz"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 router = APIRouter(
   prefix='/user', 
   tags=['user'], 
