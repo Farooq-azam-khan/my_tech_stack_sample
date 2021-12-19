@@ -22,6 +22,20 @@ SECRET_KEY = "xyz"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+
+fake_users_db = {
+    "farooq": {
+        "id": 1,
+        "name": "farooq",
+        "email": "fkhan@example.com",
+        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+        "disabled": False,
+    }
+}
+
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")
 router = APIRouter(
   prefix='/user', 
   tags=['user'], 
