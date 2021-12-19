@@ -6,6 +6,9 @@ authors = ["farooq-azam-khan <farooq1.khan@ryerson.ca>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+fastapi = "^0.70.1"
+uvicorn = "^0.16.0"
+requests = "^2.26.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
