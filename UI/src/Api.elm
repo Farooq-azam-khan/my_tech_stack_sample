@@ -1,11 +1,8 @@
 module Api exposing (..)
 
--- standard imports
--- vendor imports
--- custom imports
--- import Http
+import Http
 -- import Http.Detailed
--- import Json.Decode as D
+import Json.Decode as D
 -- import Json.Encode as E
 
 import Actions exposing (Msg(..))
@@ -20,12 +17,12 @@ backend_host =
 
 
 -- -- API
--- get_example : Cmd Msg
--- get_example =
---     Http.get
---         { url = backend_host ++ "/api/xyz"
---         , expect = Http.expectJson (RemoteData.fromResult >> MsgAction) decodeAction
---         }
+get_hw : Cmd Msg
+get_hw =
+    Http.get
+        { url = backend_host ++ "/hw"
+        , expect = Http.expectJson (RemoteData.fromResult >> HelloWorld) decodeHW
+        }
 -- post_example : SomeDataTypeToSend -> Cmd Msg
 -- post_example data =
 --     Http.post
@@ -39,8 +36,8 @@ backend_host =
 --            , ("datafield2", E.string data.y)
 --            , ("boolean", E.bool data.b)
 --            ]
--- -- DECODERS
--- decodePartners : D.Decoder (List String)
--- decodePartners = D.list D.string
+-- DECODERS
+decodeHW : D.Decoder String 
+decodeHW = D.string 
 -- decode_post_result : D.Decoder (List Todo)
 -- decode_post_result = D.list D.string

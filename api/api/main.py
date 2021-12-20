@@ -24,6 +24,12 @@ app.add_middleware(
 
 app.include_router(user_router)
 
+
+@app.get('/hw')
+def index(): 
+    return 'hello world'
+
+
 @app.get('/')
 def index(): 
     return {'hello': 'world'}

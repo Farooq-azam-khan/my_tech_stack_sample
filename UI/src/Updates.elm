@@ -41,3 +41,10 @@ update msg model =
 
         GetDetailedErrorActionExample _ ->
             Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
+        
+        HelloWorld wb -> 
+            let
+                _ = Debug.log "wb" wb
+            in
+                (model, Cmd.none)
+            

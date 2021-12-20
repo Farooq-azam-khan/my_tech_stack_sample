@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (main)
 
 import Actions exposing (Msg(..), onUrlChange, onUrlRequest)
 import Browser
@@ -12,7 +12,7 @@ import Updates exposing (update)
 import Url
 import Url.Parser exposing (parse)
 import View exposing (viewPage)
-
+import Api exposing (..)
 
 main : Program () Model Msg
 main =
@@ -42,7 +42,7 @@ init _ url key =
       , key = key
       , route = parse routeParser url
       }
-    , Cmd.none
+    , get_hw
     )
 
 
