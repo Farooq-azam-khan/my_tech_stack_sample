@@ -1,6 +1,6 @@
 # My ignores 
-UI/build.css
-UI/elm.js 
+build.css
+elm.js 
 
 # elm ignores
 elm-stuff
