@@ -13,8 +13,12 @@ import Url
 import Url.Parser exposing (parse)
 import View exposing (viewPage)
 import Api exposing (..)
+import RemoteData exposing (RemoteData(..))
+import Json.Decode as D 
 
-main : Program () Model Msg
+type alias Flag = {token: Maybe Token}
+
+main : Program Flag Model Msg
 main =
     Browser.application
         { init = init
@@ -35,15 +39,18 @@ subs _ =
 -- INIT
 
 
-init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
-    ( { login_form = Just (LoginForm "asd" "asdf")
-      , url = url
-      , key = key
-      , route = parse routeParser url
-      }
-    , get_hw
-    )
+init : Flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    let
+        _ = Debug.log "flags" flags
+        model = { login_form = Nothing, url=url, key=key
+                , route = parse routeParser url, token=NotAsked}
+        token =  case flags.token of 
+            Just tok -> Success tok 
+            Nothing -> Loading
+        cmd = if token == Loading then login_action else Cmd.none 
+    in
+        ({model | token = token}, cmd)
 
 
 

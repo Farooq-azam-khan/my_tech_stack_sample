@@ -13,11 +13,18 @@ import Routes exposing (routeParser)
 import Types exposing (..)
 import Url
 import Url.Parser
-
-
+import Json.Encode as E
+import Ports 
 
 -- UPDATE
-
+save_token_to_local_storage : WebData Token -> Cmd msg 
+save_token_to_local_storage token = 
+    case token of 
+        Success tok -> 
+            tok 
+                -- |> E.encode 0
+                |> Ports.storeTokenData
+        _ -> Cmd.none 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -37,14 +44,22 @@ update msg model =
             ( model, Cmd.none )
 
         GetWebDataExample _ ->
-            Debug.todo "branch 'GetWebDataExample _' not implemented"
+            (model, Cmd.none) -- Debug.todo "branch 'GetWebDataExample _' not implemented"
 
         GetDetailedErrorActionExample _ ->
-            Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
+            (model, Cmd.none) -- Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
         
         HelloWorld wb -> 
             let
                 _ = Debug.log "wb" wb
             in
                 (model, Cmd.none)
+        
+        ReadLoginToken login_token -> 
+            let
+                _ = Debug.log "token" login_token
+                
+            in
+                ({model | token = login_token}, save_token_to_local_storage login_token)
+            
             

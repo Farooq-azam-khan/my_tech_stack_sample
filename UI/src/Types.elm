@@ -7,7 +7,9 @@ import Url
 
 
 type alias Token =
-    String
+    { access_token: String
+    , token_type: String
+    }
 
 
 type alias LoginForm =
@@ -42,5 +44,6 @@ type alias Model =
     { login_form : Maybe LoginForm
     , key : Nav.Key
     , url : Url.Url
+    , token : WebData Token
     , route : Maybe Route
     }
