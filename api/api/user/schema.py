@@ -1,20 +1,27 @@
-from pydantic import BaseModel 
+from pydantic import BaseModel, ValidationError, validator, EmailStr
 from typing import Optional
 
 class CreateUser(BaseModel):
   name: str 
-  email: str 
+  email: EmailStr 
   password: str 
   confirm_password: str 
 
+  @validator('confirm_password')
+  def passwords_match(cls, v, values):
+    password = values['password']
+    if password != v: 
+      raise ValidationError('Passwords do not match')
+    return v
+
 class LoginUser(BaseModel):
-  email: str 
+  email: EmailStr 
   password: str 
 
 class User(BaseModel):
   id: int 
   name: str
-  email: str 
+  email: EmailStr 
   disabled: bool = False 
 
 
