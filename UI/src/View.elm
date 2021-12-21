@@ -10,9 +10,8 @@ import Html.Events exposing (..)
 import RemoteData exposing (..)
 import Routes exposing (Route(..))
 import Types exposing (..)
-import Updates as U
-import Url
-
+-- import Updates as U
+import Url 
 
 viewPage : Model -> Html Msg
 viewPage model =
@@ -36,17 +35,26 @@ viewPage model =
                             div [] [ text <| "todo: " ++ user_name ]
 
                         LoginR ->
-                            div []
-                                [ case model.login_form of
-                                    Just lf ->
-                                        login_page lf
-
-                                    Nothing ->
-                                        login_page <| LoginForm "" ""
-                                ]
+                            case model.token of 
+                                Success _ -> 
+                                    div 
+                                        [
+                                        ] 
+                                        [ text "you are already logged in"
+                                        ]
+                                _ -> 
+                                    div 
+                                        [
+                                        ]
+                                        [  login_compnent <|  init_login_form 
+                                        ]
 
                         RegisterR ->
-                            div [] [ text <| "register" ]
+                            case model.token of 
+                                Success _ -> 
+                                    div [] [text "you are already logged in"]
+                                _ -> 
+                                    div [] [ register_compnent <| init_register_form ]
 
                         ErrorR ->
                             div [] [ text <| "error occured trying to get to route: " ++ Url.toString model.url ]
@@ -56,22 +64,6 @@ viewPage model =
                 div [] [ text <| "could not parse url: " ++ Url.toString model.url ]
         ]
 
-
-
--- [ b [ class "text-bold" ] [ text (Url.toString model.url) ]
--- , ul []
---     [ viewLink "/home"
---     , viewLink "/profile"
---     , viewLink "/reviews/the-century-of-the-self"
---     , viewLink "/reviews/public-opinion"
---     , viewLink "/reviews/shah-of-shahs"
---     ]
--- , case model.login_form of
---     Just login_form ->
---         login_page login_form
---     Nothing ->
---         text ""
--- ]
 
 
 viewLink : String -> Html msg

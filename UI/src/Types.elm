@@ -11,19 +11,35 @@ type alias Token =
     , token_type: String
     }
 
+type alias Email = String 
 
 type alias LoginForm =
     { name : String
     , password : String
+    , email : Email 
     }
 
+init_login_form : LoginForm 
+init_login_form = 
+    { name = ""
+    , password = ""
+    , email = ""
+    }
 
-type alias Register =
+type alias RegisterForm =
     { name : String
     , password : String
-    , email : String
+    , confirm_password : String 
+    , email : Email
     }
-
+    
+init_register_form : RegisterForm
+init_register_form = 
+    { name = ""
+    , password = ""
+    , confirm_password = ""
+    , email = ""
+    }
 
 type alias User =
     { name : String
@@ -41,8 +57,7 @@ type alias Todo =
 
 
 type alias Model =
-    { login_form : Maybe LoginForm
-    , key : Nav.Key
+    { key : Nav.Key
     , url : Url.Url
     , token : WebData Token
     , route : Maybe Route

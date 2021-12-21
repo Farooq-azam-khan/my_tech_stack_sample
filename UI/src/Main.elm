@@ -43,7 +43,7 @@ init : Flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         _ = Debug.log "flags" flags
-        model = { login_form = Nothing, url=url, key=key
+        model = { url=url, key=key
                 , route = parse routeParser url, token=NotAsked}
         token =  case flags.token of 
             Just tok -> Success tok 
