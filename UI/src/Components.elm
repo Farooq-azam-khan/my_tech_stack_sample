@@ -1,8 +1,5 @@
 module Components exposing (..)
 
--- standard imports
--- vendor imports
--- custom imports
 
 import Actions exposing (..)
 import Helpers exposing (..)
