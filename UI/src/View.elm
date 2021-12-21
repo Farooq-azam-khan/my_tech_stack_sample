@@ -17,7 +17,8 @@ import Url
 viewPage : Model -> Html Msg
 viewPage model =
     main_ []
-        [ case model.route of
+        [ h1 [class "text-2xl font-bold text-indigo-900"] [text "Testing Tailiwnd with docker 2xl"]
+        , case model.route of
             Just route ->
                 div []
                     [ navbar_component route

@@ -7,7 +7,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres 
   
-  web: 
+  api: 
     build: ./api
     volumes: 
       - ./api:/api
@@ -16,8 +16,6 @@ services:
     depends_on:
       - postgres
   
-
-  
   ui: 
     build: ./UI
     volumes: 
@@ -25,7 +23,7 @@ services:
     ports: 
       - "3000:3000"
     depends_on:
-      - web 
+      - api 
 
   # graphql-engine:
   #   image: hasura/graphql-engine:v2.0.10
