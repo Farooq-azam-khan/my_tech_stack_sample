@@ -10,23 +10,21 @@ import Html.Events exposing (..)
 import RemoteData exposing (..)
 import Routes exposing (Route(..))
 import Types exposing (..)
--- import Updates as U
 import Url 
+
+import Pages.Home exposing (home_page)
 
 viewPage : Model -> Html Msg
 viewPage model =
     main_ []
-        [ h1 [class "text-2xl font-bold text-indigo-900"] [text "Testing Tailiwnd with docker 2xl"]
-        , case model.route of
+        [ case model.route of
             Just route ->
                 div []
                     [ navbar_component route
                     , case route of
                         HomeR ->
                             div
-                                []
-                                [ text "Home"
-                                ]
+                                [class "container"] [home_page model]
 
                         TodoR todo_id ->
                             div [] [ text <| "todo: " ++ String.fromInt todo_id ]
@@ -37,17 +35,9 @@ viewPage model =
                         LoginR ->
                             case model.token of 
                                 Success _ -> 
-                                    div 
-                                        [
-                                        ] 
-                                        [ text "you are already logged in"
-                                        ]
+                                    div []  [ text "you are already logged in"]
                                 _ -> 
-                                    div 
-                                        [
-                                        ]
-                                        [  login_compnent <|  init_login_form 
-                                        ]
+                                    div [] [  login_compnent <|  init_login_form ]
 
                         RegisterR ->
                             case model.token of 
