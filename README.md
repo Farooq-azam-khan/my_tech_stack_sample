@@ -14,3 +14,12 @@
 * postgres db
 * token based auth
 * graphql with hasura
+
+
+## How records in PG will be stored
+*  slug UUID + pk Integer Auto Increment Unique Not Null
+    * slug for unique client side identification
+    * pk for primary key indexing 
+
+# Hasura setup migrations
+- https://hasura.io/docs/latest/graphql/core/migrations/migrations-setup.html#migrations-setup
