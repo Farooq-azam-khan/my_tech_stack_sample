@@ -10,6 +10,7 @@
 ## Features
 * type safe and reliable programming with elm and Python
 * focus on reliability, security, and ease of use
+* Test first support
 * postgres db
 * token based auth
 * graphql with hasura
