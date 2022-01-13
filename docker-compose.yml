@@ -31,6 +31,7 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - api
     restart: always
     environment:
       ## postgres database to store Hasura metadata
@@ -38,15 +39,15 @@ services:
       ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
       PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "false" # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-      HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS512", "key": "-----BEGIN PUBLIC
-        KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3WojgGHFHYLugd\nUWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlvdbH6dvEOfou0/gCFQs\nHUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GUnKHkkle+Q0pX/g6jXZ7r1/xAK5D\no2kQ+X5xK9cipRgEKwIDAQAB\n-----END
-        PUBLIC KEY-----\n", "claims_format": "json"}'
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key":
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "claims_format": "json"}'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
   # pgadmin:
   #   container_name: pgadmin
   #   image: dpage/pgadmin4

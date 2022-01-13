@@ -4,13 +4,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 
-from api.user.routes import router as user_router
+# from api.user.routes import router as user_router
+from api.client import Client
+from api.types import CreateUserOutput, SignupUser, LoginUser, JsonWebToken
+
+import jwt
+
 
 app = FastAPI()
 
 frontend_app_port: int = 3000
 origins = [f"http://localhost:{frontend_app_port}", f"localhost:3000"]
 
+HASURA_URL = "http://graphql-engine:8080/v1/graphql"
+HASURA_HEADERS = {"X-Hasura-Admin-Secret": "myadminsecretkey"}
+HASURA_JWT_SECRET = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+client = Client(url=HASURA_URL, headers=HASURA_HEADERS)
+Password = PasswordHasher()
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,117 +30,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(user_router)
-
-
-@app.get("/hw")
-def index():
-    return "hello world"
-
-
-@app.get("/")
-async def index():
-    return {"hello": "world"}
-
-
+# app.include_router(user_router)
 from pydantic import BaseModel
-from requests import request
-import requests
-from dataclasses import dataclass
-
-Password = PasswordHasher()
 
 
-@dataclass
-class Client:
-    url: str
-    headers: dict
-
-    def run_query(self, query: str, variables: dict, extract=False):
-        request = requests.post(
-            self.url,
-            headers=self.headers,
-            json={"query": query, "variables": variables},
-        )
-        assert request.ok, f"Failed with code {request.status_code}"
-        return request.json()
-
-    create_user = lambda self, username, password: self.run_query(
-        """
-            mutation CreateUser($username: String!, $password: String!) {
-                insert_user_one(object: {username: $username, password: $password}) {
-                    id
-                    username
-                    password
-                }
-            }
-        """,
-        {"username": username, "password": password},
-    )
-
-    find_user_by_username = lambda self, username: self.run_query(
-        """
-        query UserByUsername($username: String!) {
-            user(where: {username: {_eq: $username}}, limit: 1) {
-                id
-                username
-                password
-            }
-        }
-    """,
-        {"username": username},
-    )
-
-    update_password = lambda self, id, password: self.run_query(
-        """
-        mutation UpdatePassword($id: Int!, $password: String!) {
-            update_user_by_pk(pk_columns: {id: $id}, _set: {password: $password}) {
-                password
-            }
-        }
-    """,
-        {"id": id, "password": password},
-    )
-
-
-HASURA_URL = "http://graphql-engine:8080/v1/graphql"
-HASURA_HEADERS = {"X-Hasura-Admin-Secret": "myadminsecretkey"}
-HASURA_JWT_SECRET = "asdf"
-client = Client(url=HASURA_URL, headers=HASURA_HEADERS)
-
-
-class LoginUser(BaseModel):
-    username: str
-    password: str
-
-
-class CreateUserOutput(BaseModel):
-    id: int
-    password: str
-    username: str
+class SignupInput(BaseModel):
+    input: SignupUser
 
 
 @app.post("/hasura-jwt-signup")
-def handle_jwt_signup(login_data: LoginUser):
-    print("from python fastapi:", login_data)
-    hashed_password = Password.hash(login_data.password)
-    user_response = client.create_user(login_data.username, hashed_password)
+def handle_jwt_signup(signup_info: SignupInput):
+    signup_info = signup_info.input
+    print("from python fastapi:", signup_info.username)
+    hashed_password = Password.hash(signup_info.password)
+    user_response = client.create_user(signup_info.username, hashed_password)
     try:
 
         # happy path
-        print("user resposnse:", user_response)
+        # print("user resposnse:", user_response)
         user = user_response["data"]["insert_user_one"]
         return CreateUserOutput(**user)
     except Exception as e:
         return str(e.message)
-
-
-class JsonWebToken(BaseModel):
-    token: str
-
-
-import os
-import jwt
 
 
 def rehash_and_save_password_if_needed(user, plaintext_password):
@@ -159,15 +80,20 @@ def generate_token(user) -> str:
         "https://hasura.io/jwt/claims": {
             "x-hasura-allowed-roles": user_roles,
             "x-hasura-default-role": "user",
-            "x-hasura-user-id": user["id"],
+            "x-hasura-user-id": str(user["id"]),
         }
     }
     token = jwt.encode(payload, HASURA_JWT_SECRET, "HS256")
     return token  # .decode("utf-8")
 
 
+class LoginUserInput(BaseModel):
+    input: LoginUser
+
+
 @app.post("/hasura-jwt-login")
-def handle_jwt_login(login_request: LoginUser):
+def handle_jwt_login(login_request: LoginUserInput):
+    login_request = login_request.input
     user_response = client.find_user_by_username(login_request.username)
     try:
         users = user_response["data"]["user"]
