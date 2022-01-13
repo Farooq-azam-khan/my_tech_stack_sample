@@ -15,7 +15,9 @@
     "build:elm": "elm make src/Main.elm --output=build/elm.js --optimize",
     "build:tailwind": "tailwindcss -i tailwind.css -o build/build.css --minify",
     "build": "mkdir build & cp index.html build & npm run build:tailwind & npm run build:elm",
-    "api": "elm-graphql http://localhost:8080/v1/graphql --base BackendAPI --header 'X-Hasura-Admin-Secret: myadminsecretkey'"
+    "api:admin": "elm-graphql http://localhost:8080/v1/graphql --base BackendAdminAPI --header 'X-Hasura-Admin-Secret: myadminsecretkey'",
+    "api:dummy_user": "elm-graphql http://localhost:8080/v1/graphql --base BackendAPI --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsidXNlciJdLCJ4LWhhc3VyYS1kZWZhdWx0LXJvbGUiOiJ1c2VyIiwieC1oYXN1cmEtdXNlci1pZCI6IjEifX0.9cKzVkGCr8lwWymThDgo2uavjjD45qfvq98v-ALZ6GA'",
+    "api:anon": "elm-graphql http://localhost:8080/v1/graphql --base AnonAPI"
   },
   "keywords": [],
   "author": "",

@@ -1,30 +1,35 @@
 module Updates exposing (update)
 
--- vendor imports
--- custom imports
+-- import Json.Encode as E
 
 import Actions exposing (..)
 import Api exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import Helpers exposing (..)
+import Ports
 import RemoteData exposing (..)
-import Routes exposing (routeParser)
+import Routes exposing (Route(..), routeParser)
 import Types exposing (..)
 import Url
 import Url.Parser
-import Json.Encode as E
-import Ports 
+
+
 
 -- UPDATE
-save_token_to_local_storage : WebData Token -> Cmd msg 
-save_token_to_local_storage token = 
-    case token of 
-        Success tok -> 
-            tok 
+
+
+save_token_to_local_storage : WebData Token -> Cmd msg
+save_token_to_local_storage token =
+    case token of
+        Success tok ->
+            tok
                 -- |> E.encode 0
                 |> Ports.storeTokenData
-        _ -> Cmd.none 
+
+        _ ->
+            Cmd.none
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -44,22 +49,47 @@ update msg model =
             ( model, Cmd.none )
 
         GetWebDataExample _ ->
-            (model, Cmd.none) -- Debug.todo "branch 'GetWebDataExample _' not implemented"
+            ( model, Cmd.none )
 
+        -- Debug.todo "branch 'GetWebDataExample _' not implemented"
         GetDetailedErrorActionExample _ ->
-            (model, Cmd.none) -- Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
-        
-        HelloWorld wb -> 
+            ( model, Cmd.none )
+
+        -- Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
+        HelloWorld wb ->
             let
-                _ = Debug.log "wb" wb
+                _ =
+                    Debug.log "wb" wb
             in
-                (model, Cmd.none)
-        
-        ReadLoginToken login_token -> 
+            ( model, Cmd.none )
+
+        ReadLoginToken login_token ->
             let
-                _ = Debug.log "token" login_token
-                
+                _ =
+                    Debug.log "token" login_token
             in
-                ({model | token = login_token}, save_token_to_local_storage login_token)
-            
-            
+            ( model, Cmd.none )
+
+        -- ( { model | token = login_token }, save_token_to_local_storage login_token )
+        SignupResponseAction resp ->
+            let
+                _ =
+                    Debug.log "signup resp" resp
+            in
+            case resp of
+                Success _ ->
+                    ( { model | route = Just HomeR, signup_user = { password = "", username = "" } }
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        RegisterUserAction username password ->
+            ( model, makeSignupRequest username password )
+
+        UpdateSignupPassword password ->
+            ( { model | signup_user = { password = password, username = model.signup_user.username } }, Cmd.none )
+
+        UpdateSignupUsername username ->
+            ( { model | signup_user = { password = model.signup_user.password, username = username } }, Cmd.none )

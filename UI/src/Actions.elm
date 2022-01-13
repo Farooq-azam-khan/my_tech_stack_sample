@@ -5,6 +5,7 @@ module Actions exposing (..)
 -- custom imports
 
 import Browser
+import Graphql.Http
 import Http
 import Http.Detailed
 import RemoteData exposing (..)
@@ -34,3 +35,7 @@ type Msg
     | UrlChanged Url.Url
     | GetWebDataExample (WebData (List Todo))
     | GetDetailedErrorActionExample (RemoteData (Http.Detailed.Error String) ( Http.Metadata, Bool ))
+    | SignupResponseAction (RemoteData (Graphql.Http.Error MaybeSignupResponse) MaybeSignupResponse)
+    | RegisterUserAction String String
+    | UpdateSignupUsername String
+    | UpdateSignupPassword String

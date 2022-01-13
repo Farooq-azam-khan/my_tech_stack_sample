@@ -7,39 +7,46 @@ import Url
 
 
 type alias Token =
-    { access_token: String
-    , token_type: String
+    { access_token : String
+    , token_type : String
     }
 
-type alias Email = String 
+
+type alias Email =
+    String
+
 
 type alias LoginForm =
     { name : String
     , password : String
-    , email : Email 
+    , email : Email
     }
 
-init_login_form : LoginForm 
-init_login_form = 
+
+init_login_form : LoginForm
+init_login_form =
     { name = ""
     , password = ""
     , email = ""
     }
 
+
 type alias RegisterForm =
     { name : String
     , password : String
-    , confirm_password : String 
+    , confirm_password : String
     , email : Email
     }
-    
+
+
 init_register_form : RegisterForm
-init_register_form = 
+init_register_form =
     { name = ""
     , password = ""
     , confirm_password = ""
     , email = ""
     }
+
 
 type alias User =
     { name : String
@@ -56,9 +63,22 @@ type alias Todo =
 -- MODEL
 
 
+type alias SignupUserForm =
+    { username : String, password : String }
+
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , token : WebData Token
     , route : Maybe Route
+    , signup_user : SignupUserForm
     }
+
+
+type alias SignupResponse =
+    { username : String, password : String, id : Int }
+
+
+type alias MaybeSignupResponse =
+    Maybe SignupResponse

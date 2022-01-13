@@ -1,6 +1,5 @@
 module Components exposing (..)
 
-
 import Actions exposing (..)
 import Helpers exposing (..)
 import Html exposing (..)
@@ -109,35 +108,51 @@ login_compnent login_form =
         ]
 
 
-register_compnent : Types.RegisterForm -> Html Msg
+register_compnent : Types.SignupUserForm -> Html Msg
 register_compnent register_form =
-    Html.form [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col" ]
+    Html.form [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col", onSubmit (RegisterUserAction register_form.username register_form.password) ]
         [ div [ class "mb-4" ]
             [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "name" ]
                 [ text "Name" ]
-            , input [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker", id "username", placeholder "What should I call You?", type_ "text", value register_form.name ]
+            , input
+                [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+                , id "username"
+                , placeholder "What should I call You?"
+                , type_ "text"
+                , value register_form.username
+                , onInput UpdateSignupUsername
+                ]
                 []
             ]
         , div [ class "mb-6" ]
             [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "password" ]
                 [ text "Password" ]
-            , input [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3", id "password", placeholder "******************", type_ "password", value register_form.password ]
+            , input
+                [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3"
+                , id "password"
+                , placeholder "******************"
+                , type_ "password"
+                , value register_form.password
+                , onInput UpdateSignupPassword
+                ]
                 []
             , p [ class "text-red text-xs italic" ]
                 [ text "Please choose a password." ]
             ]
-        , div [ class "mb-6" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "c-password" ]
-                [ text "Confirm Password" ]
-            , input [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3", id "pc-assword", placeholder "******************", type_ "password", value register_form.confirm_password ]
-                []
-            , p [ class "text-red text-xs italic" ]
-                [ text "Please confirm your password." ]
-            ]
+
+        -- , div [ class "mb-6" ]
+        --     [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "c-password" ]
+        --         [ text "Confirm Password" ]
+        --     , input [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3", id "pc-assword", placeholder "******************", type_ "password", value register_form.confirm_password ]
+        --         []
+        --     , p [ class "text-red text-xs italic" ]
+        --         [ text "Please confirm your password." ]
+        --     ]
         , div [ class "flex items-center justify-between" ]
             [ button [ class "bg-black text-white px-3 py-2 rounded-md", type_ "submit" ]
                 [ text "Sign Up" ]
-            , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
-                [ text "Forgot Password?" ]
+
+            -- , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
+            --     [ text "Forgot Password?" ]
             ]
         ]

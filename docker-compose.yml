@@ -16,15 +16,6 @@ services:
     depends_on:
       - postgres
 
-  ui:
-    build: ./UI
-    volumes:
-      - ./UI:/ui
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-
   graphql-engine:
     image: hasura/graphql-engine:v2.0.10
     ports:
@@ -48,6 +39,15 @@ services:
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key":
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "claims_format": "json"}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
+  ui:
+    build: ./UI
+    volumes:
+      - ./UI:/ui
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+      - graphql-engine
   # pgadmin:
   #   container_name: pgadmin
   #   image: dpage/pgadmin4
