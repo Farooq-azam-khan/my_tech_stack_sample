@@ -1,0 +1,12 @@
+user 
+    id int autoincrement primary key
+    username text unique 
+    password text 
+    created at 
+    updated at 
+
+-- 
+todo 
+    id int autoincrement primary key 
+    name text 
+    user_id int foerign key user.id 
