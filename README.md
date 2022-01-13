@@ -23,3 +23,8 @@
 
 # Hasura setup migrations
 - https://hasura.io/docs/latest/graphql/core/migrations/migrations-setup.html#migrations-setup
+
+## Elm Graphql Codegen
+* https://hasura.io/learn/graphql/elm-graphql/elm-graphql/
+* can use admin secret or use a dummy user for authorization bearer token   
+* potential idea for two elm frontend apps, 1 for admin and 1 for normal users 
