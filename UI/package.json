@@ -10,16 +10,18 @@
     "dev:tailwind": "tailwindcss -i tailwind.css -o build.css --watch",
     "docker:elm": "elm-live -p 3000 --host=0.0.0.0 src/Main.elm --pushstate -- --debug --output=elm.js",
     "docker:tailwind": "npm run dev:tailwind",
-    "watch:elm": "npm run dev:elm", 
+    "watch:elm": "npm run dev:elm",
     "watch:tailwind": "npm run dev:tailwind",
     "build:elm": "elm make src/Main.elm --output=build/elm.js --optimize",
     "build:tailwind": "tailwindcss -i tailwind.css -o build/build.css --minify",
-    "build": "mkdir build & cp index.html build & npm run build:tailwind & npm run build:elm"
+    "build": "mkdir build & cp index.html build & npm run build:tailwind & npm run build:elm",
+    "api": "elm-graphql http://localhost:8080/v1/graphql --base BackendAPI --header 'X-Hasura-Admin-Secret: myadminsecretkey'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@dillonkearns/elm-graphql": "^4.2.3",
     "concurrently": "^6.5.1",
     "elm": "^0.19.1-5",
     "elm-format": "^0.8.5",
