@@ -21,14 +21,48 @@
     * slug for unique client side identification
     * pk for primary key indexing 
 
-# Hasura setup migrations
-- https://hasura.io/docs/latest/graphql/core/migrations/migrations-setup.html#migrations-setup
-- step by step
-1. hasura init
-2. cd in hasura folder
-3. put admin_secret in config.yml file
-4. create initial migrtion: `hasura migrate create "init" --from-server --database-name [name of database in hasura (i called it dev)]`
-5. the created migrations have been applied thus apply them: `haura migrate apply --version "version that came when step 4 was executed" --skip-execution` --database-name dev
+# Hasura migrations and metadata workflow
+
+## Setup 
+1. `hasura init hasura --endpoint http:graphql-engine:8080`
+2. `cd hasura`
+3. put `admin_secret:??` in `config.yml` file
+4. create initial migrtion from a hasura client currently running: `hasura migrate create "init" --from-server --database-name [name of database in hasura (i called it dev)]`
+5. the created migrations have been applied thus apply them: `haura migrate apply --version "version that came when step 4 was executed" --skip-execution --database-name dev` (step might not be neede)
+6. apply the metadata changes `hasura metadata apply`
+7. update the docker compose of the graphql app to (with your env vars of course). 
+```YAML
+graphql-engine:
+    image: hasura/graphql-engine:v2.0.10.cli-migrations-v3
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - api
+    restart: always
+    volumes:
+      - ./hasura/migrations:/hasura-migrations
+      - ./hasura/metadata:/hasura-metadata
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
+      PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key":
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "claims_format": "json"}'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
+```
+8. starup the engine: `cd ..` and `docker-compose up`
+
+## Workflow 
+apply metadata: `hasura metadata apply` 
 
 ## Elm Graphql Codegen
 * https://hasura.io/learn/graphql/elm-graphql/elm-graphql/
