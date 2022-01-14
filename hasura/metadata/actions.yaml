@@ -3,10 +3,14 @@ actions:
   definition:
     kind: synchronous
     handler: http://api:8000/hasura-jwt-login
+  permissions:
+  - role: anonymous
 - name: Signup
   definition:
     kind: synchronous
     handler: http://api:8000/hasura-jwt-signup
+  permissions:
+  - role: anonymous
 custom_types:
   enums: []
   input_objects: []
