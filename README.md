@@ -49,7 +49,7 @@ graphql-engine:
       ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
       PG_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       ## enable the console served by server
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
@@ -59,8 +59,10 @@ graphql-engine:
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "claims_format": "json"}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
 ```
-8. starup the engine: `cd ..` and `docker-compose up`
-
+8. start up the engine: `cd ..` and `docker-compose up`
+9. start up the hasura console: `cd hasura`, `hasura console`
+- any migration level changes will automatically be applied
+- any metdata level changes (like permission, action, events, etc.) will need to be added by you
 ## Workflow 
 apply metadata: `hasura metadata apply` 
 
