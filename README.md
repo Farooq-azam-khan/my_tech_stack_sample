@@ -23,6 +23,12 @@
 
 # Hasura setup migrations
 - https://hasura.io/docs/latest/graphql/core/migrations/migrations-setup.html#migrations-setup
+- step by step
+1. hasura init
+2. cd in hasura folder
+3. put admin_secret in config.yml file
+4. create initial migrtion: `hasura migrate create "init" --from-server --database-name [name of database in hasura (i called it dev)]`
+5. the created migrations have been applied thus apply them: `haura migrate apply --version "version that came when step 4 was executed" --skip-execution` --database-name dev
 
 ## Elm Graphql Codegen
 * https://hasura.io/learn/graphql/elm-graphql/elm-graphql/

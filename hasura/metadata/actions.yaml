@@ -1,0 +1,16 @@
+actions:
+- name: Login
+  definition:
+    kind: synchronous
+    handler: http://api:8000/hasura-jwt-login
+- name: Signup
+  definition:
+    kind: synchronous
+    handler: http://api:8000/hasura-jwt-signup
+custom_types:
+  enums: []
+  input_objects: []
+  objects:
+  - name: JsonWebToken
+  - name: CreateUserOutput
+  scalars: []

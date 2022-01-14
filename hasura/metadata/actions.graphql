@@ -5,16 +5,15 @@ type Mutation {
   ): JsonWebToken
 }
 
-type JsonWebToken {
-  token: String!
-}
-
---
 type Mutation {
   Signup(
     username: String!
     password: String!
   ): CreateUserOutput
+}
+
+type JsonWebToken {
+  token: String!
 }
 
 type CreateUserOutput {
