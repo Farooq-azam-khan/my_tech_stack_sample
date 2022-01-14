@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 
-# from api.user.routes import router as user_router
 from api.client import Client
 from api.types import CreateUserOutput, SignupUser, LoginUser, JsonWebToken
 
@@ -30,7 +29,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.include_router(user_router)
 from pydantic import BaseModel
 
 
