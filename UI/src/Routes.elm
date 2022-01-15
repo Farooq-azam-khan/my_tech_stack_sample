@@ -10,6 +10,7 @@ type Route
     | LoginR
     | RegisterR
     | ErrorR
+    | LogoutR 
 
 
 routeParser : Parser (Route -> a) a
@@ -25,4 +26,5 @@ routeParser =
         , map RegisterR (s "register")
         , map RegisterR (s "sign-up")
         , map RegisterR (s "signup")
+        , map LogoutR (s "logout")
         ]

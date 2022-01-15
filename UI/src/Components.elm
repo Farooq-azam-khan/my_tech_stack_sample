@@ -28,8 +28,8 @@ inactive_route route_name path =
         [ text route_name ]
 
 
-navbar_component : Route -> Html Msg
-navbar_component route =
+navbar_component : Model -> Route -> Html Msg
+navbar_component model route =
     div
         [ class "w-full text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800"
         ]
@@ -53,30 +53,33 @@ navbar_component route =
             , nav
                 [ class "flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
                 ]
-                (case route of
-                    HomeR ->
-                        [ active_route "Home" "home"
-                        , inactive_route "Login" "login"
-                        , inactive_route "Register" "register"
-                        ]
+                (case model.token of 
+                    Just token -> [active_route "Home" "home", inactive_route "Logout" "logout"]
+                    Nothing -> 
+                        case route of
+                            HomeR ->
+                                [ active_route "Home" "home"
+                                , inactive_route "Login" "login"
+                                , inactive_route "Register" "register"
+                                ]
 
-                    LoginR ->
-                        [ inactive_route "Home" "home"
-                        , active_route "Login" "login"
-                        , inactive_route "Register" "register"
-                        ]
+                            LoginR ->
+                                [ inactive_route "Home" "home"
+                                , active_route "Login" "login"
+                                , inactive_route "Register" "register"
+                                ]
 
-                    RegisterR ->
-                        [ inactive_route "Home" "home"
-                        , inactive_route "Login" "login"
-                        , active_route "Register" "register"
-                        ]
+                            RegisterR ->
+                                [ inactive_route "Home" "home"
+                                , inactive_route "Login" "login"
+                                , active_route "Register" "register"
+                                ]
 
-                    _ ->
-                        [ active_route "Home" "home"
-                        , inactive_route "Login" "login"
-                        , inactive_route "Register" "register"
-                        ]
+                            _ ->
+                                [ active_route "Home" "home"
+                                , inactive_route "Login" "login"
+                                , inactive_route "Register" "register"
+                                ]
                 )
             ]
         ]

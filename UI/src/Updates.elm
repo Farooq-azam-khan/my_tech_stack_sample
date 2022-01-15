@@ -41,12 +41,17 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model
-                | url = url
-                , route = Url.Parser.parse routeParser url
-              }
-            , Cmd.none
-            )
+            let
+                new_model =  { model | url = url, route = Url.Parser.parse routeParser url }
+            in
+                case new_model.route of 
+                    Just route -> 
+                        case route of 
+                            LogoutR -> ({new_model | token = Nothing}, Ports.logoutUser ())
+                            _ -> (new_model, Cmd.none)
+                    _ -> (new_model, Cmd.none)
+
+          
 
         NoOp ->
             ( model, Cmd.none )

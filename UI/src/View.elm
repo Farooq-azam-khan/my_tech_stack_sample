@@ -20,7 +20,7 @@ viewPage model =
         [ case model.route of
             Just route ->
                 div []
-                    [ navbar_component route
+                    [ navbar_component model route
                     , case route of
                         HomeR ->
                             div
@@ -51,6 +51,7 @@ viewPage model =
 
                         ErrorR ->
                             div [] [ text <| "error occured trying to get to route: " ++ Url.toString model.url ]
+                        _ -> div [] []
                     ]
 
             Nothing ->
