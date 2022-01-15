@@ -89,10 +89,14 @@ type alias LoginFormData =
     }
 
 
+type alias UserData = {id: Int, username: String}
+type alias TodoData = {id: Int, name: String }
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , token : MaybeLoginResponse
+    , user : Maybe UserData 
+    , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , route : Maybe Route
     , signup_user : SignupUserForm
     , login_user : LoginFormData

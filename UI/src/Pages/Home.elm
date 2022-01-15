@@ -12,15 +12,29 @@ home_page model =
     div
         []
         [ case model.token of
-            Just _ ->
-                div
-                    []
-                    [ h1
-                        []
-                        [ text "Here are you TODOS"
+            Just _ -> 
+                div 
+                    [] 
+                    [ div 
+                        [] 
+                        [ h2 [] [text "Create Todo"]
+                        , input [placeholder "what would you like to do?"] []
+                        , button [] [text "Create todo"]
                         ]
-                    ]
-
+                    , case model.user_todos of 
+                        Success todos -> 
+                            div 
+                                [] 
+                                [ h1
+                                    []
+                                    [ text "Here are you TODOS"
+                                    ]
+                                    , ol 
+                                    []
+                                    (List.map (\todo -> li [] [text todo.name]) todos)
+                                ]
+                        _ -> div [] [p [] [text "no todos"]]
+                ]
             Nothing ->
                 not_logged_in_card
         ]

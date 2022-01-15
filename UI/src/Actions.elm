@@ -39,3 +39,5 @@ type Msg
     | LoginResponseAction (RemoteData (Graphql.Http.Error MaybeLoginResponse) MaybeLoginResponse)
     | UpdateLoginUsername String
     | UpdateLoginPassword String
+    | GetUserDataResult (RemoteData (Graphql.Http.Error (List UserData)) (List UserData))
+    | GetTodoDataResult (RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData))
