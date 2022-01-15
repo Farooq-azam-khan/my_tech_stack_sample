@@ -190,3 +190,4 @@ makeLoginRequest username password =
 
 
 -- get logged in user todos
+-- get user data first
