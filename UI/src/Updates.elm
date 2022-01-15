@@ -43,34 +43,44 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | url = url, route = Url.Parser.parse routeParser url }, Cmd.none )
+            ( { model
+                | url = url
+                , route = Url.Parser.parse routeParser url
+              }
+            , Cmd.none
+            )
 
         NoOp ->
             ( model, Cmd.none )
 
         GetWebDataExample _ ->
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
-        -- Debug.todo "branch 'GetWebDataExample _' not implemented"
         GetDetailedErrorActionExample _ ->
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
-        -- Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
         HelloWorld wb ->
             let
                 _ =
                     Debug.log "wb" wb
             in
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
         ReadLoginToken login_token ->
             let
                 _ =
                     Debug.log "token" login_token
             in
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
-        -- ( { model | token = login_token }, save_token_to_local_storage login_token )
         SignupResponseAction resp ->
             let
                 _ =
@@ -78,7 +88,13 @@ update msg model =
             in
             case resp of
                 Success _ ->
-                    ( { model | route = Just HomeR, signup_user = { password = "", username = "" } }
+                    ( { model
+                        | route = Just HomeR
+                        , signup_user =
+                            { password = ""
+                            , username = ""
+                            }
+                      }
                     , Cmd.none
                     )
 
@@ -86,10 +102,87 @@ update msg model =
                     ( model, Cmd.none )
 
         RegisterUserAction username password ->
-            ( model, makeSignupRequest username password )
+            ( model
+            , makeSignupRequest username password
+            )
 
         UpdateSignupPassword password ->
-            ( { model | signup_user = { password = password, username = model.signup_user.username } }, Cmd.none )
+            ( { model
+                | signup_user =
+                    { password = password
+                    , username = model.signup_user.username
+                    }
+              }
+            , Cmd.none
+            )
 
         UpdateSignupUsername username ->
-            ( { model | signup_user = { password = model.signup_user.password, username = username } }, Cmd.none )
+            ( { model
+                | signup_user =
+                    { password = model.signup_user.password
+                    , username = username
+                    }
+              }
+            , Cmd.none
+            )
+
+        LoginFormAction ->
+            ( model
+            , makeLoginRequest model.login_user.username model.login_user.password
+            )
+
+        LoginResponseAction resp ->
+            let
+                _ =
+                    Debug.log "login resp" resp
+
+                login_user =
+                    model.login_user
+
+                new_login_user =
+                    { login_user
+                        | username = ""
+                        , password = ""
+                    }
+
+                clear_login_model =
+                    { model | login_user = new_login_user }
+            in
+            case resp of
+                Success maybe_tok ->
+                    ( { clear_login_model | token = maybe_tok }, Nav.pushUrl model.key "/" )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        UpdateLoginUsername username ->
+            let
+                login_user =
+                    model.login_user
+
+                update_user =
+                    { login_user
+                        | username = username
+                    }
+            in
+            ( { model
+                | login_user = update_user
+              }
+            , Cmd.none
+            )
+
+        UpdateLoginPassword password ->
+            let
+                login_user =
+                    model.login_user
+
+                update_user =
+                    { login_user
+                        | password = password
+                    }
+            in
+            ( { model
+                | login_user = update_user
+              }
+            , Cmd.none
+            )

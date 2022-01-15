@@ -11,7 +11,3 @@ type CreateUserOutput
 
 type JsonWebToken
     = JsonWebToken
-
-
-type User_mutation_response
-    = User_mutation_response

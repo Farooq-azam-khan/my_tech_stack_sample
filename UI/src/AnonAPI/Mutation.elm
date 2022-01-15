@@ -45,20 +45,3 @@ signup :
     -> SelectionSet (Maybe decodesTo) RootMutation
 signup requiredArgs____ object____ =
     Object.selectionForCompositeField "Signup" [ Argument.required "password" requiredArgs____.password Encode.string, Argument.required "username" requiredArgs____.username Encode.string ] object____ (Basics.identity >> Decode.nullable)
-
-
-type alias InsertUserRequiredArguments =
-    { objects : List AnonAPI.InputObject.User_insert_input }
-
-
-{-| insert data into the table: "user"
-
-  - objects - the rows to be inserted
-
--}
-insert_user :
-    InsertUserRequiredArguments
-    -> SelectionSet decodesTo AnonAPI.Object.User_mutation_response
-    -> SelectionSet (Maybe decodesTo) RootMutation
-insert_user requiredArgs____ object____ =
-    Object.selectionForCompositeField "insert_user" [ Argument.required "objects" requiredArgs____.objects (AnonAPI.InputObject.encodeUser_insert_input |> Encode.list) ] object____ (Basics.identity >> Decode.nullable)

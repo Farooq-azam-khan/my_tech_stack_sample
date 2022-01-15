@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Browser.Navigation as Nav
+import Graphql.Http
 import RemoteData exposing (..)
 import Routes exposing (Route)
 import Url
@@ -16,19 +17,18 @@ type alias Email =
     String
 
 
-type alias LoginForm =
-    { name : String
-    , password : String
-    , email : Email
-    }
 
-
-init_login_form : LoginForm
-init_login_form =
-    { name = ""
-    , password = ""
-    , email = ""
-    }
+-- type alias LoginForm =
+--     { name : String
+--     , password : String
+--     , email : Email
+--     }
+-- init_login_form : LoginForm
+-- init_login_form =
+--     { name = ""
+--     , password = ""
+--     , email = ""
+--     }
 
 
 type alias RegisterForm =
@@ -67,18 +67,33 @@ type alias SignupUserForm =
     { username : String, password : String }
 
 
-type alias Model =
-    { key : Nav.Key
-    , url : Url.Url
-    , token : WebData Token
-    , route : Maybe Route
-    , signup_user : SignupUserForm
-    }
-
-
 type alias SignupResponse =
     { username : String, password : String, id : Int }
 
 
 type alias MaybeSignupResponse =
     Maybe SignupResponse
+
+
+type alias LoginResponse =
+    { token : String }
+
+
+type alias MaybeLoginResponse =
+    Maybe LoginResponse
+
+
+type alias LoginFormData =
+    { username : String
+    , password : String
+    }
+
+
+type alias Model =
+    { key : Nav.Key
+    , url : Url.Url
+    , token : MaybeLoginResponse -- RemoteData (Graphql.Http.Error MaybeLoginResponse) MaybeLoginResponse
+    , route : Maybe Route
+    , signup_user : SignupUserForm
+    , login_user : LoginFormData
+    }

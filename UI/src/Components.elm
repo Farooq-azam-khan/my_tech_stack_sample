@@ -82,37 +82,72 @@ navbar_component route =
         ]
 
 
-login_compnent : Types.LoginForm -> Html Msg
+login_compnent : Types.LoginFormData -> Html Msg
 login_compnent login_form =
-    Html.form [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col" ]
-        [ div [ class "mb-4" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "name" ]
+    Html.div
+        -- todo: form later
+        [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
+        ]
+        [ div
+            [ class "mb-4" ]
+            [ label
+                [ class "block text-grey-darker text-sm font-bold mb-2"
+                , for "name"
+                ]
                 [ text "Name" ]
-            , input [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker", id "username", placeholder "What should I call You?", type_ "text", value login_form.name ]
+            , input
+                [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+                , id "username"
+                , placeholder "what is your username?"
+                , type_ "text"
+                , value login_form.username
+                , onInput UpdateLoginUsername
+                ]
                 []
             ]
         , div [ class "mb-6" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "password" ]
+            [ label
+                [ class "block text-grey-darker text-sm font-bold mb-2", for "password" ]
                 [ text "Password" ]
-            , input [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3", id "password", placeholder "******************", type_ "password", value login_form.password ]
+            , input
+                [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3"
+                , id "password"
+                , placeholder "******************"
+                , type_ "password"
+                , value login_form.password
+                , onInput UpdateLoginPassword
+                ]
                 []
             , p [ class "text-red text-xs italic" ]
                 [ text "Please choose a password." ]
             ]
         , div [ class "flex items-center justify-between" ]
-            [ button [ class "bg-black text-white px-3 py-2 rounded-md", type_ "submit" ]
-                [ text "Sign In" ]
-            , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
-                [ text "Forgot Password?" ]
+            [ button
+                [ class "bg-black text-white px-3 py-2 rounded-md"
+                , type_ "button"
+                , onClick LoginFormAction
+                ]
+                [ text "Sign In"
+                ]
+
+            -- , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
+            --     [ text "Forgot Password?" ]
             ]
         ]
 
 
 register_compnent : Types.SignupUserForm -> Html Msg
 register_compnent register_form =
-    Html.form [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col", onSubmit (RegisterUserAction register_form.username register_form.password) ]
-        [ div [ class "mb-4" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "name" ]
+    Html.form
+        [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
+        , onSubmit (RegisterUserAction register_form.username register_form.password)
+        ]
+        [ div
+            [ class "mb-4" ]
+            [ label
+                [ class "block text-grey-darker text-sm font-bold mb-2"
+                , for "name"
+                ]
                 [ text "Name" ]
             , input
                 [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"

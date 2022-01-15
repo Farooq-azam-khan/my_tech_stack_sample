@@ -35,16 +35,16 @@ viewPage model =
 
                         LoginR ->
                             case model.token of
-                                Success _ ->
-                                    div [] [ text "you are already logged in" ]
+                                Just _ ->
+                                    text ""
 
-                                _ ->
-                                    div [] [ login_compnent <| init_login_form ]
+                                Nothing ->
+                                    div [] [ login_compnent <| model.login_user ]
 
                         RegisterR ->
                             case model.token of
-                                Success _ ->
-                                    div [] [ text "you are already logged in" ]
+                                Just _ ->
+                                    text ""
 
                                 _ ->
                                     div [] [ register_compnent <| model.signup_user ]
