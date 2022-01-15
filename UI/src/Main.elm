@@ -40,9 +40,6 @@ subs _ =
 init : Flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
-        _ =
-            Debug.log "flags" flags
-
         model =
             { url = url
             , key = key

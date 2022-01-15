@@ -36,7 +36,7 @@ viewPage model =
                         LoginR ->
                             case model.token of
                                 Just _ ->
-                                    text ""
+                                    logged_in_card
 
                                 Nothing ->
                                     div [] [ login_compnent <| model.login_user ]

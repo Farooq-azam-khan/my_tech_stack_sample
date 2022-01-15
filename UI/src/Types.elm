@@ -92,7 +92,7 @@ type alias LoginFormData =
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
-    , token : MaybeLoginResponse -- RemoteData (Graphql.Http.Error MaybeLoginResponse) MaybeLoginResponse
+    , token : MaybeLoginResponse
     , route : Maybe Route
     , signup_user : SignupUserForm
     , login_user : LoginFormData

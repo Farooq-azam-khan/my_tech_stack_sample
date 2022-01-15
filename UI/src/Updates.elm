@@ -19,15 +19,13 @@ import Url.Parser
 -- UPDATE
 
 
-save_token_to_local_storage : WebData Token -> Cmd msg
+save_token_to_local_storage : MaybeLoginResponse -> Cmd msg
 save_token_to_local_storage token =
     case token of
-        Success tok ->
-            tok
-                -- |> E.encode 0
-                |> Ports.storeTokenData
+        Just tok ->
+            Ports.storeTokenData tok
 
-        _ ->
+        Nothing ->
             Cmd.none
 
 
@@ -72,11 +70,7 @@ update msg model =
             , Cmd.none
             )
 
-        ReadLoginToken login_token ->
-            let
-                _ =
-                    Debug.log "token" login_token
-            in
+        ReadLoginToken _ ->
             ( model
             , Cmd.none
             )
@@ -132,25 +126,14 @@ update msg model =
             )
 
         LoginResponseAction resp ->
-            let
-                _ =
-                    Debug.log "login resp" resp
-
-                login_user =
-                    model.login_user
-
-                new_login_user =
-                    { login_user
-                        | username = ""
-                        , password = ""
-                    }
-
-                clear_login_model =
-                    { model | login_user = new_login_user }
-            in
             case resp of
                 Success maybe_tok ->
-                    ( { clear_login_model | token = maybe_tok }, Nav.pushUrl model.key "/" )
+                    ( { model | token = maybe_tok }
+                    , Cmd.batch
+                        [ save_token_to_local_storage maybe_tok
+                        , Nav.pushUrl model.key "/"
+                        ]
+                    )
 
                 _ ->
                     ( model, Cmd.none )
