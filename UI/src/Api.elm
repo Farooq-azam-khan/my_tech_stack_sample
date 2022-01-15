@@ -186,3 +186,7 @@ makeLoginRequest username password =
     loginMutation username password
         |> Graphql.Http.mutationRequest graphql_url
         |> Graphql.Http.send (RemoteData.fromResult >> LoginResponseAction)
+
+
+
+-- get logged in user todos
