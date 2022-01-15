@@ -1,9 +1,5 @@
 module Actions exposing (..)
 
--- standard imports
--- vendor imports
--- custom imports
-
 import Browser
 import Graphql.Http
 import Http
@@ -39,3 +35,9 @@ type Msg
     | RegisterUserAction String String
     | UpdateSignupUsername String
     | UpdateSignupPassword String
+    | LoginFormAction
+    | LoginResponseAction (RemoteData (Graphql.Http.Error MaybeLoginResponse) MaybeLoginResponse)
+    | UpdateLoginUsername String
+    | UpdateLoginPassword String
+    | GetUserDataResult (RemoteData (Graphql.Http.Error (List UserData)) (List UserData))
+    | GetTodoDataResult (RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData))

@@ -20,20 +20,25 @@
         const node = document.querySelector('#elm-app')
         if (node) {
             // Get token from local storage
-            const token_str = localStorage.getItem(`${APP_NAME}_token`)
-            const token_json = token_str ? JSON.parse(token_str) : null
-            console.log('read token:', token_json, typeof token_json)
+            const token_str = sessionStorage.getItem(`${APP_NAME}_token`)
+            const token_json = JSON.parse(token_str)
+            // console.log(token_json)
+            // const token_json = token_str ? JSON.parse(token_str) : null
+            // console.log('read token:', token_json, typeof token_json)
             const app = Elm.Main.init({
                 node: node,
                 flags: { 'token': token_json }
             })
-            console.log({ app })
-            // TODO: idk why this broke
 
-            // app.ports.storeTokenData.subscribe((token) => {
-            //     console.log('From index.html', token)
-            //     localStorage.setItem(`${APP_NAME}_token`, JSON.stringify(token));
-            // })
+            app.ports.storeTokenData.subscribe(token => {
+                // console.log('From index.html', token)
+                sessionStorage.setItem(`${APP_NAME}_token`, JSON.stringify(token));
+            })
+
+            app.ports.logoutUser.subscribe(() => {
+                console.log("Logging out user")
+                sessionStorage.removeItem(`${APP_NAME}_token`);
+            })
         }
     </script>
 </body>

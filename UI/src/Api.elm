@@ -3,18 +3,23 @@ module Api exposing (..)
 -- import Http.Detailed
 
 import Actions exposing (Msg(..))
-import AnonAPI.Mutation exposing (SignupRequiredArguments, signup)
-import AnonAPI.Object exposing (CreateUserOutput)
+import AnonAPI.Mutation exposing (LoginRequiredArguments, SignupRequiredArguments, login, signup)
+import AnonAPI.Object exposing (CreateUserOutput, JsonWebToken)
 import AnonAPI.Object.CreateUserOutput as CreateUserOutputObj
+import AnonAPI.Object.JsonWebToken as JsonWebTokenObj
 import Graphql.Http
-import Graphql.Operation exposing (RootMutation)
+import Graphql.Operation exposing (RootMutation, RootQuery)
 import Graphql.SelectionSet as SelectionSet exposing (SelectionSet)
 import Http
 import Json.Decode as D
 import Json.Encode as E
 import RemoteData exposing (..)
 import Types exposing (..)
+import BackendAPI.Query as BAPIQuery
 
+import BackendAPI.Object exposing (User, Todo)
+import BackendAPI.Object.User as BAPIObjUser
+import BackendAPI.Object.Todo as BAPIObjTodo
 
 backend_host : String
 backend_host =
@@ -128,8 +133,15 @@ signupArgs un pswd =
     }
 
 
+loginArgs : String -> String -> LoginRequiredArguments
+loginArgs un pswd =
+    { password = pswd
+    , username = un
+    }
+
+
 type alias Flag =
-    { token : Maybe Token }
+    { token : MaybeLoginResponse }
 
 
 signup_decoder : SelectionSet SignupResponse CreateUserOutput
@@ -139,6 +151,13 @@ signup_decoder =
         CreateUserOutputObj.username
         CreateUserOutputObj.password
         CreateUserOutputObj.id
+
+
+login_decoder : SelectionSet LoginResponse JsonWebToken
+login_decoder =
+    SelectionSet.map
+        Types.LoginResponse
+        JsonWebTokenObj.token
 
 
 signupMutation : String -> String -> SelectionSet MaybeSignupResponse RootMutation
@@ -153,3 +172,74 @@ makeSignupRequest username password =
     signupMutation username password
         |> Graphql.Http.mutationRequest graphql_url
         |> Graphql.Http.send (RemoteData.fromResult >> SignupResponseAction)
+
+
+
+-- login
+
+
+loginMutation : String -> String -> SelectionSet MaybeLoginResponse RootMutation
+loginMutation username password =
+    login
+        (loginArgs username password)
+        login_decoder
+
+
+makeLoginRequest : String -> String -> Cmd Msg
+makeLoginRequest username password =
+    loginMutation username password
+        |> Graphql.Http.mutationRequest graphql_url
+        |> Graphql.Http.send (RemoteData.fromResult >> LoginResponseAction)
+
+
+
+
+-- get user data
+{-
+query MyQuery {
+  user {
+    id
+    username
+  }
+}
+-}
+
+
+user_data_selection : SelectionSet UserData User
+user_data_selection = SelectionSet.map2 UserData BAPIObjUser.id BAPIObjUser.username
+
+user_data_query : SelectionSet (List UserData) RootQuery
+user_data_query = BAPIQuery.user identity user_data_selection
+
+get_user_data_request : LoginResponse -> Cmd Msg 
+get_user_data_request token = 
+    user_data_query
+        |> Graphql.Http.queryRequest graphql_url
+        |> Graphql.Http.withHeader "Authorization" ("Bearer "++ token.token)
+        |> Graphql.Http.send (RemoteData.fromResult >> GetUserDataResult)
+
+    
+-- get todo data
+{-
+query MyQuery {
+  todo {
+    name
+    id
+  }
+}
+-}
+
+
+todo_data_selection : SelectionSet TodoData Todo
+todo_data_selection = SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
+
+todo_data_query : SelectionSet (List TodoData) RootQuery
+todo_data_query = BAPIQuery.todo identity todo_data_selection
+
+get_todo_data_request : LoginResponse -> Cmd Msg 
+get_todo_data_request token = 
+    todo_data_query
+        |> Graphql.Http.queryRequest graphql_url
+        |> Graphql.Http.withHeader "Authorization" ("Bearer "++ token.token)
+        |> Graphql.Http.send (RemoteData.fromResult >> GetTodoDataResult)
+        

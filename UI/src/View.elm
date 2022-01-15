@@ -20,7 +20,7 @@ viewPage model =
         [ case model.route of
             Just route ->
                 div []
-                    [ navbar_component route
+                    [ navbar_component model route
                     , case route of
                         HomeR ->
                             div
@@ -35,22 +35,23 @@ viewPage model =
 
                         LoginR ->
                             case model.token of
-                                Success _ ->
-                                    div [] [ text "you are already logged in" ]
+                                Just _ ->
+                                    logged_in_card
 
-                                _ ->
-                                    div [] [ login_compnent <| init_login_form ]
+                                Nothing ->
+                                    div [] [ login_compnent <| model.login_user ]
 
                         RegisterR ->
                             case model.token of
-                                Success _ ->
-                                    div [] [ text "you are already logged in" ]
+                                Just _ ->
+                                    text ""
 
                                 _ ->
                                     div [] [ register_compnent <| model.signup_user ]
 
                         ErrorR ->
                             div [] [ text <| "error occured trying to get to route: " ++ Url.toString model.url ]
+                        _ -> div [] []
                     ]
 
             Nothing ->

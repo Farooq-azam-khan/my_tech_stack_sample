@@ -2,12 +2,9 @@
 -- https://github.com/dillonkearns/elm-graphql
 
 
-module AnonAPI.Object exposing (..)
+module BackendAPI.Interface exposing (..)
 
 
-type CreateUserOutput
-    = CreateUserOutput
-
-
-type JsonWebToken
-    = JsonWebToken
+placeholder : String
+placeholder =
+    ""

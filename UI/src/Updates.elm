@@ -19,15 +19,13 @@ import Url.Parser
 -- UPDATE
 
 
-save_token_to_local_storage : WebData Token -> Cmd msg
+save_token_to_local_storage : MaybeLoginResponse -> Cmd msg
 save_token_to_local_storage token =
     case token of
-        Success tok ->
-            tok
-                -- |> E.encode 0
-                |> Ports.storeTokenData
+        Just tok ->
+            Ports.storeTokenData tok
 
-        _ ->
+        Nothing ->
             Cmd.none
 
 
@@ -43,34 +41,45 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | url = url, route = Url.Parser.parse routeParser url }, Cmd.none )
+            let
+                new_model =  { model | url = url, route = Url.Parser.parse routeParser url }
+            in
+                case new_model.route of 
+                    Just route -> 
+                        case route of 
+                            LogoutR -> ({new_model | token = Nothing}, Ports.logoutUser ())
+                            _ -> (new_model, Cmd.none)
+                    _ -> (new_model, Cmd.none)
+
+          
 
         NoOp ->
             ( model, Cmd.none )
 
         GetWebDataExample _ ->
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
-        -- Debug.todo "branch 'GetWebDataExample _' not implemented"
         GetDetailedErrorActionExample _ ->
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
-        -- Debug.todo "branch 'GetDetailedErrorActionExample _' not implemented"
         HelloWorld wb ->
             let
                 _ =
                     Debug.log "wb" wb
             in
-            ( model, Cmd.none )
+            ( model
+            , Cmd.none
+            )
 
-        ReadLoginToken login_token ->
-            let
-                _ =
-                    Debug.log "token" login_token
-            in
-            ( model, Cmd.none )
+        ReadLoginToken _ ->
+            ( model
+            , Cmd.none
+            )
 
-        -- ( { model | token = login_token }, save_token_to_local_storage login_token )
         SignupResponseAction resp ->
             let
                 _ =
@@ -78,7 +87,13 @@ update msg model =
             in
             case resp of
                 Success _ ->
-                    ( { model | route = Just HomeR, signup_user = { password = "", username = "" } }
+                    ( { model
+                        | route = Just HomeR
+                        , signup_user =
+                            { password = ""
+                            , username = ""
+                            }
+                      }
                     , Cmd.none
                     )
 
@@ -86,10 +101,104 @@ update msg model =
                     ( model, Cmd.none )
 
         RegisterUserAction username password ->
-            ( model, makeSignupRequest username password )
+            ( model
+            , makeSignupRequest username password
+            )
 
         UpdateSignupPassword password ->
-            ( { model | signup_user = { password = password, username = model.signup_user.username } }, Cmd.none )
+            ( { model
+                | signup_user =
+                    { password = password
+                    , username = model.signup_user.username
+                    }
+              }
+            , Cmd.none
+            )
 
         UpdateSignupUsername username ->
-            ( { model | signup_user = { password = model.signup_user.password, username = username } }, Cmd.none )
+            ( { model
+                | signup_user =
+                    { password = model.signup_user.password
+                    , username = username
+                    }
+              }
+            , Cmd.none
+            )
+
+        LoginFormAction ->
+            ( model
+            , makeLoginRequest model.login_user.username model.login_user.password
+            )
+
+        LoginResponseAction resp ->
+            case resp of
+                Success maybe_tok ->
+                    ( { model | token = maybe_tok }
+                    , Cmd.batch
+                        [ save_token_to_local_storage maybe_tok
+                        , Nav.pushUrl model.key "/"
+                        , case model.token of 
+                            Just token -> get_user_data_request token -- get user data 
+                            Nothing -> Cmd.none
+                        ]
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        UpdateLoginUsername username ->
+            let
+                login_user =
+                    model.login_user
+
+                update_user =
+                    { login_user
+                        | username = username
+                    }
+            in
+            ( { model
+                | login_user = update_user
+              }
+            , Cmd.none
+            )
+
+        UpdateLoginPassword password ->
+            let
+                login_user =
+                    model.login_user
+
+                update_user =
+                    { login_user
+                        | password = password
+                    }
+            in
+            ( { model
+                | login_user = update_user
+              }
+            , Cmd.none
+            )
+
+        GetUserDataResult resp -> 
+            case resp of 
+                Success users -> 
+                    case List.head users of 
+                        Just user -> 
+                            let 
+                                _ = Debug.log "user" user 
+                            in 
+                            ({model | user = Just user}, 
+                                case model.token of 
+                                    Just token -> get_todo_data_request token
+                                    Nothing -> Cmd.none
+                            )
+                        Nothing -> 
+                            ({model | token = Nothing }, Cmd.none)
+                _ -> 
+                    ({model | token = Nothing }, Cmd.none)
+
+            
+        GetTodoDataResult resp -> 
+            let 
+                _ = Debug.log "todo resp" resp 
+            in 
+            ({model | user_todos = resp }, Cmd.none)

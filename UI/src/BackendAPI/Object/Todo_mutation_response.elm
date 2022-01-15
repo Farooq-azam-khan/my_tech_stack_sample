@@ -2,14 +2,14 @@
 -- https://github.com/dillonkearns/elm-graphql
 
 
-module AnonAPI.Object.User_mutation_response exposing (..)
+module BackendAPI.Object.Todo_mutation_response exposing (..)
 
-import AnonAPI.InputObject
-import AnonAPI.Interface
-import AnonAPI.Object
-import AnonAPI.Scalar
-import AnonAPI.ScalarCodecs
-import AnonAPI.Union
+import BackendAPI.InputObject
+import BackendAPI.Interface
+import BackendAPI.Object
+import BackendAPI.Scalar
+import BackendAPI.ScalarCodecs
+import BackendAPI.Union
 import Graphql.Internal.Builder.Argument as Argument exposing (Argument)
 import Graphql.Internal.Builder.Object as Object
 import Graphql.Internal.Encode as Encode exposing (Value)
@@ -21,6 +21,15 @@ import Json.Decode as Decode
 
 {-| number of rows affected by the mutation
 -}
-affected_rows : SelectionSet Int AnonAPI.Object.User_mutation_response
+affected_rows : SelectionSet Int BackendAPI.Object.Todo_mutation_response
 affected_rows =
     Object.selectionForField "Int" "affected_rows" [] Decode.int
+
+
+{-| data from the rows affected by the mutation
+-}
+returning :
+    SelectionSet decodesTo BackendAPI.Object.Todo
+    -> SelectionSet (List decodesTo) BackendAPI.Object.Todo_mutation_response
+returning object____ =
+    Object.selectionForCompositeField "returning" [] object____ (Basics.identity >> Decode.list)

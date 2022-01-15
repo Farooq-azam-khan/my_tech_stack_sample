@@ -28,8 +28,8 @@ inactive_route route_name path =
         [ text route_name ]
 
 
-navbar_component : Route -> Html Msg
-navbar_component route =
+navbar_component : Model -> Route -> Html Msg
+navbar_component model route =
     div
         [ class "w-full text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800"
         ]
@@ -53,66 +53,104 @@ navbar_component route =
             , nav
                 [ class "flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
                 ]
-                (case route of
-                    HomeR ->
-                        [ active_route "Home" "home"
-                        , inactive_route "Login" "login"
-                        , inactive_route "Register" "register"
-                        ]
+                (case model.token of 
+                    Just token -> [active_route "Home" "home", inactive_route "Logout" "logout"]
+                    Nothing -> 
+                        case route of
+                            HomeR ->
+                                [ active_route "Home" "home"
+                                , inactive_route "Login" "login"
+                                , inactive_route "Register" "register"
+                                ]
 
-                    LoginR ->
-                        [ inactive_route "Home" "home"
-                        , active_route "Login" "login"
-                        , inactive_route "Register" "register"
-                        ]
+                            LoginR ->
+                                [ inactive_route "Home" "home"
+                                , active_route "Login" "login"
+                                , inactive_route "Register" "register"
+                                ]
 
-                    RegisterR ->
-                        [ inactive_route "Home" "home"
-                        , inactive_route "Login" "login"
-                        , active_route "Register" "register"
-                        ]
+                            RegisterR ->
+                                [ inactive_route "Home" "home"
+                                , inactive_route "Login" "login"
+                                , active_route "Register" "register"
+                                ]
 
-                    _ ->
-                        [ active_route "Home" "home"
-                        , inactive_route "Login" "login"
-                        , inactive_route "Register" "register"
-                        ]
+                            _ ->
+                                [ active_route "Home" "home"
+                                , inactive_route "Login" "login"
+                                , inactive_route "Register" "register"
+                                ]
                 )
             ]
         ]
 
 
-login_compnent : Types.LoginForm -> Html Msg
+login_compnent : Types.LoginFormData -> Html Msg
 login_compnent login_form =
-    Html.form [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col" ]
-        [ div [ class "mb-4" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "name" ]
+    Html.div
+        -- todo: form later
+        [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
+        ]
+        [ div
+            [ class "mb-4" ]
+            [ label
+                [ class "block text-grey-darker text-sm font-bold mb-2"
+                , for "name"
+                ]
                 [ text "Name" ]
-            , input [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker", id "username", placeholder "What should I call You?", type_ "text", value login_form.name ]
+            , input
+                [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
+                , id "username"
+                , placeholder "what is your username?"
+                , type_ "text"
+                , value login_form.username
+                , onInput UpdateLoginUsername
+                ]
                 []
             ]
         , div [ class "mb-6" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "password" ]
+            [ label
+                [ class "block text-grey-darker text-sm font-bold mb-2", for "password" ]
                 [ text "Password" ]
-            , input [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3", id "password", placeholder "******************", type_ "password", value login_form.password ]
+            , input
+                [ class "shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3"
+                , id "password"
+                , placeholder "******************"
+                , type_ "password"
+                , value login_form.password
+                , onInput UpdateLoginPassword
+                ]
                 []
             , p [ class "text-red text-xs italic" ]
                 [ text "Please choose a password." ]
             ]
         , div [ class "flex items-center justify-between" ]
-            [ button [ class "bg-black text-white px-3 py-2 rounded-md", type_ "submit" ]
-                [ text "Sign In" ]
-            , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
-                [ text "Forgot Password?" ]
+            [ button
+                [ class "bg-black text-white px-3 py-2 rounded-md"
+                , type_ "button"
+                , onClick LoginFormAction
+                ]
+                [ text "Sign In"
+                ]
+
+            -- , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
+            --     [ text "Forgot Password?" ]
             ]
         ]
 
 
 register_compnent : Types.SignupUserForm -> Html Msg
 register_compnent register_form =
-    Html.form [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col", onSubmit (RegisterUserAction register_form.username register_form.password) ]
-        [ div [ class "mb-4" ]
-            [ label [ class "block text-grey-darker text-sm font-bold mb-2", for "name" ]
+    Html.form
+        [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
+        , onSubmit (RegisterUserAction register_form.username register_form.password)
+        ]
+        [ div
+            [ class "mb-4" ]
+            [ label
+                [ class "block text-grey-darker text-sm font-bold mb-2"
+                , for "name"
+                ]
                 [ text "Name" ]
             , input
                 [ class "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker"
@@ -154,5 +192,44 @@ register_compnent register_form =
 
             -- , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
             --     [ text "Forgot Password?" ]
+            ]
+        ]
+
+
+logged_in_card : Html msg
+logged_in_card =
+    div
+        [ class "max-w-lg mx-auto"
+        ]
+        [ div
+            [ class "bg-white shadow-md border border-gray-200 rounded-lg max-w-sm mb-5"
+            ]
+            [ a
+                [ href "#"
+                ]
+                [ img
+                    [ class "rounded-t-lg"
+                    , src "https://flowbite.com/docs/images/blog/image-1.jpg"
+                    , alt ""
+                    ]
+                    []
+                ]
+            , div
+                [ class "p-5"
+                ]
+                [ a
+                    [ href "#"
+                    ]
+                    [ h5
+                        [ class "text-gray-900 font-bold text-2xl tracking-tight mb-2"
+                        ]
+                        [ text "Login Page" ]
+                    ]
+                , p
+                    [ class "font-normal text-gray-700 mb-3"
+                    ]
+                    [ text "You are already logged in"
+                    ]
+                ]
             ]
         ]
