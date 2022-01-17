@@ -70,3 +70,9 @@ apply metadata: `hasura metadata apply`
 * https://hasura.io/learn/graphql/elm-graphql/elm-graphql/
 * can use admin secret or use a dummy user for authorization bearer token   
 * potential idea for two elm frontend apps, 1 for admin and 1 for normal users 
+
+## Installations
+* hasura cli
+* docker
+* docker-compose
+* node/npm
