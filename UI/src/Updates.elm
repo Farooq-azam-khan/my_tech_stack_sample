@@ -51,6 +51,15 @@ update msg model =
                         LogoutR ->
                             ( { new_model | token = Nothing, user_todos = NotAsked, user = Nothing }, Ports.logoutUser () )
 
+                        HomeR ->
+                            case model.token of
+                                Just token ->
+                                    ( { new_model | user_todos = Loading }, get_todo_data_request token )
+
+                                -- get user data
+                                Nothing ->
+                                    ( new_model, Cmd.none )
+
                         _ ->
                             ( new_model, Cmd.none )
 
@@ -161,13 +170,6 @@ update msg model =
                         , case model.token of
                             Just token ->
                                 get_user_data_request token
-
-                            -- get user data
-                            Nothing ->
-                                Cmd.none
-                        , case model.token of
-                            Just token ->
-                                get_todo_data_request token
 
                             -- get user data
                             Nothing ->
