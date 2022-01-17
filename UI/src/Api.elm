@@ -169,6 +169,11 @@ makeSignupRequest username password =
 -- login
 
 
+generate_authorization_header : LoginResponse -> Graphql.Http.Request decodesTo -> Graphql.Http.Request decodesTo
+generate_authorization_header token =
+    Graphql.Http.withHeader "Authorization" ("Bearer " ++ token.token)
+
+
 loginMutation : String -> String -> SelectionSet MaybeLoginResponse RootMutation
 loginMutation username password =
     login
@@ -209,7 +214,7 @@ get_user_data_request : LoginResponse -> Cmd Msg
 get_user_data_request token =
     user_data_query
         |> Graphql.Http.queryRequest graphql_url
-        |> Graphql.Http.withHeader "Authorization" ("Bearer " ++ token.token)
+        |> generate_authorization_header token
         |> Graphql.Http.send (RemoteData.fromResult >> GetUserDataResult)
 
 
@@ -239,5 +244,5 @@ get_todo_data_request : LoginResponse -> Cmd Msg
 get_todo_data_request token =
     todo_data_query
         |> Graphql.Http.queryRequest graphql_url
-        |> Graphql.Http.withHeader "Authorization" ("Bearer " ++ token.token)
+        |> generate_authorization_header token
         |> Graphql.Http.send (RemoteData.fromResult >> GetTodoDataResult)
