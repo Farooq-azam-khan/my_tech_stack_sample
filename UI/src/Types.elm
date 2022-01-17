@@ -111,6 +111,10 @@ type alias TodoData =
     { id : Int, name : String }
 
 
+type alias Flag =
+    { token : MaybeLoginResponse }
+
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url

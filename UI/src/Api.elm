@@ -1,13 +1,14 @@
 module Api exposing (..)
 
 -- import Http.Detailed
+-- import Json.Encode as E
 
 import Actions exposing (Msg(..))
 import AnonAPI.Mutation exposing (LoginRequiredArguments, SignupRequiredArguments, login, signup)
 import AnonAPI.Object exposing (CreateUserOutput, JsonWebToken)
 import AnonAPI.Object.CreateUserOutput as CreateUserOutputObj
 import AnonAPI.Object.JsonWebToken as JsonWebTokenObj
-import BackendAPI.Object exposing (Todo, User)
+import BackendAPI.Object
 import BackendAPI.Object.Todo as BAPIObjTodo
 import BackendAPI.Object.User as BAPIObjUser
 import BackendAPI.Query as BAPIQuery
@@ -16,7 +17,6 @@ import Graphql.Operation exposing (RootMutation, RootQuery)
 import Graphql.SelectionSet as SelectionSet exposing (SelectionSet)
 import Http
 import Json.Decode as D
-import Json.Encode as E
 import RemoteData exposing (..)
 import Types exposing (..)
 
@@ -38,18 +38,16 @@ get_hw =
         }
 
 
-login_dummy_data : List ( String, String )
-login_dummy_data =
-    [ ( "grant_type", "" )
-    , ( "username", "farooq" )
-    , ( "password", "secret" )
-    , ( "scope", "" )
-    , ( "client_id", "" )
-    , ( "client_secret", "" )
-    ]
 
-
-
+-- login_dummy_data : List ( String, String )
+-- login_dummy_data =
+--     [ ( "grant_type", "" )
+--     , ( "username", "farooq" )
+--     , ( "password", "secret" )
+--     , ( "scope", "" )
+--     , ( "client_id", "" )
+--     , ( "client_secret", "" )
+--     ]
 -- login_action : Cmd Msg
 -- login_action =
 --     Http.post
@@ -129,10 +127,6 @@ loginArgs un pswd =
     { password = pswd
     , username = un
     }
-
-
-type alias Flag =
-    { token : MaybeLoginResponse }
 
 
 signup_decoder : SelectionSet SignupResponse CreateUserOutput

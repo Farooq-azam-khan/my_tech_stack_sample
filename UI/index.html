@@ -26,16 +26,12 @@
             // Get token from local storage
             const token_str = sessionStorage.getItem(`${APP_NAME}_token`)
             const token_json = JSON.parse(token_str)
-            // console.log(token_json)
-            // const token_json = token_str ? JSON.parse(token_str) : null
-            // console.log('read token:', token_json, typeof token_json)
             const app = Elm.Main.init({
                 node: node,
                 flags: { 'token': token_json }
             })
 
             app.ports.storeTokenData.subscribe(token => {
-                // console.log('From index.html', token)
                 sessionStorage.setItem(`${APP_NAME}_token`, JSON.stringify(token));
             })
 
