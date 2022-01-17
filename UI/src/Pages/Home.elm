@@ -24,6 +24,7 @@ home_page model =
                             , id "todo_name"
                             , placeholder "what would you like todo?"
                             , onInput UpdateTodoCreationName
+                            , value model.create_todo.name
                             , type_ "text"
                             ]
                             []
@@ -37,16 +38,23 @@ home_page model =
                         ]
                     , case model.user_todos of
                         Success todos ->
-                            div
-                                [ class "bg-gray-100 py-5 px-10 shadow-xl rounded-md" ]
-                                [ h1
-                                    [ class "text-3xl font-bold" ]
-                                    [ text "Here are you TODOS"
+                            if List.length todos == 0 then
+                                div [ class "flex items-center justify-center bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full" ]
+                                    [ h2
+                                        [ class "text-center font-semibold text-gray-700 text-xl" ]
+                                        [ text "You do not have any todos. Make some." ]
                                     ]
-                                , ol
-                                    [ class "my-10 space-y-10" ]
-                                    (List.map todo_component todos)
-                                ]
+
+                            else
+                                div [ class "bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full" ]
+                                    [ h1
+                                        [ class "text-3xl font-bold" ]
+                                        [ text "Here are you TODOS"
+                                        ]
+                                    , ol
+                                        [ class "my-10 space-y-10" ]
+                                        (List.map todo_component todos)
+                                    ]
 
                         _ ->
                             div [] [ p [] [ text "no todos" ] ]

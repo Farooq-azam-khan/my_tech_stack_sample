@@ -285,3 +285,20 @@ makeTodoRequest token todo user =
         |> Graphql.Http.mutationRequest graphql_url
         |> generate_authorization_header token
         |> Graphql.Http.send (RemoteData.fromResult >> GetTodoDataCreationResult)
+
+
+
+-- delete todo
+
+
+todo_delete_mutation : TodoId -> SelectionSet (Maybe TodoData) RootMutation
+todo_delete_mutation todo_id =
+    BAPIMutation.delete_todo_by_pk { id = todo_id } create_todo_data_selection
+
+
+delete_user_todo : LoginResponse -> TodoId -> Cmd Msg
+delete_user_todo token todo_id =
+    todo_delete_mutation todo_id
+        |> Graphql.Http.mutationRequest graphql_url
+        |> generate_authorization_header token
+        |> Graphql.Http.send (RemoteData.fromResult >> TodoDataDeletionResult)

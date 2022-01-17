@@ -107,8 +107,14 @@ type alias UserData =
     { id : Int, username : Username }
 
 
+type alias TodoId =
+    Int
+
+
 type alias TodoData =
-    { id : Int, name : String }
+    { id : TodoId
+    , name : String
+    }
 
 
 type alias Flag =

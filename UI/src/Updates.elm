@@ -151,7 +151,11 @@ update msg model =
                 Just token ->
                     case model.user of
                         Just user ->
-                            makeTodoRequest token model.create_todo user
+                            if model.create_todo.name == "" then
+                                Cmd.none
+
+                            else
+                                makeTodoRequest token model.create_todo user
 
                         Nothing ->
                             Cmd.none
@@ -245,6 +249,9 @@ update msg model =
 
         GetTodoDataCreationResult resp ->
             let
+                clear_create_form =
+                    { name = "" }
+
                 user_todos =
                     case model.user_todos of
                         Success todos ->
@@ -269,7 +276,7 @@ update msg model =
                 _ =
                     Debug.log "todo creation" resp
             in
-            ( { model | user_todos = Success new_user_todos }, Cmd.none )
+            ( { model | user_todos = Success new_user_todos, create_todo = clear_create_form }, Cmd.none )
 
         UpdateTodoCreationName todo_name ->
             let
@@ -286,4 +293,39 @@ update msg model =
                 _ =
                     Debug.log "deleting" todo_id
             in
-            ( model, Cmd.none )
+            ( model
+            , case model.token of
+                Just token ->
+                    delete_user_todo token todo_id
+
+                Nothing ->
+                    Cmd.none
+            )
+
+        TodoDataDeletionResult resp ->
+            let
+                _ =
+                    Debug.log "result" resp
+
+                todo_list =
+                    case model.user_todos of
+                        Success todos ->
+                            todos
+
+                        _ ->
+                            []
+
+                new_todo_list =
+                    case resp of
+                        Success maybe_todos ->
+                            case maybe_todos of
+                                Just todo ->
+                                    List.filter (\t -> not <| t.id == todo.id) todo_list
+
+                                Nothing ->
+                                    todo_list
+
+                        _ ->
+                            todo_list
+            in
+            ( { model | user_todos = Success new_todo_list }, Cmd.none )
