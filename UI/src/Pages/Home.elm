@@ -10,33 +10,57 @@ import Types exposing (..)
 home_page : Model -> Html Msg
 home_page model =
     div
-        []
+        [ class "max-w-2xl mx-auto" ]
         [ case model.token of
-            Just _ -> 
-                div 
-                    [] 
-                    [ div 
-                        [] 
-                        [ h2 [] [text "Create Todo"]
-                        , input [placeholder "what would you like to do?"] []
-                        , button [] [text "Create todo"]
+            Just _ ->
+                div
+                    []
+                    [ div
+                        [ class "flex flex-col space-y-5 px-10 md:px-0 md:flex-row md:items-center md:justify-between md:space-x-3 my-10" ]
+                        [ h2 [] [ text "Create Todo" ]
+                        , input
+                            [ class "shadow appearance-none border rounded w-full py-4 px-4 text-grey-darker"
+                            , id "todo_name"
+                            , placeholder "what would you like todo?"
+                            , type_ "text"
+                            ]
+                            []
+                        , button
+                            [ class "bg-black text-white px-3 py-2 rounded-md uppercase text-sm shadow-md hover:shadow-xl font-semibold"
+                            , type_ "button"
+                            ]
+                            [ text "Create TODO"
+                            ]
                         ]
-                    , case model.user_todos of 
-                        Success todos -> 
-                            div 
-                                [] 
+                    , case model.user_todos of
+                        Success todos ->
+                            div
+                                [ class "bg-gray-100 py-5 px-10 shadow-xl rounded-md" ]
                                 [ h1
-                                    []
+                                    [ class "text-3xl font-bold" ]
                                     [ text "Here are you TODOS"
                                     ]
-                                    , ol 
-                                    []
-                                    (List.map (\todo -> li [] [text todo.name]) todos)
+                                , ol
+                                    [ class "my-10 space-y-10" ]
+                                    (List.map todo_component todos)
                                 ]
-                        _ -> div [] [p [] [text "no todos"]]
-                ]
+
+                        _ ->
+                            div [] [ p [] [ text "no todos" ] ]
+                    ]
+
             Nothing ->
                 not_logged_in_card
+        ]
+
+
+todo_component : TodoData -> Html msg
+todo_component todo =
+    li
+        [ class "bg-white rounded-md p-5" ]
+        [ h3
+            [ class "text-lg hover:text-indigo-700" ]
+            [ a [ class "", "/todo/" ++ String.fromInt todo.id |> href ] [ text todo.name ] ]
         ]
 
 

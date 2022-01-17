@@ -10,16 +10,14 @@ type Route
     | LoginR
     | RegisterR
     | ErrorR
-    | LogoutR 
+    | LogoutR
 
 
 routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
-        [ map TodoR (s "todo" </> int)
-        , map UserR (s "user" </> string)
+        [ map HomeR top
         , map HomeR (s "home")
-        , map HomeR top
         , map LoginR (s "login")
         , map LoginR (s "sign-in")
         , map LoginR (s "signin")
@@ -27,4 +25,6 @@ routeParser =
         , map RegisterR (s "sign-up")
         , map RegisterR (s "signup")
         , map LogoutR (s "logout")
+        , map TodoR (s "todo" </> int)
+        , map UserR (s "user" </> string)
         ]
