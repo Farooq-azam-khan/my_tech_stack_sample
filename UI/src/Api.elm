@@ -262,24 +262,21 @@ create_todo_data_selection =
     SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
 
 
-todo_required_args : CreateTodo -> InsertTodoOneRequiredArguments
-todo_required_args todo =
-    { object = { id = Absent, name = Present todo.name, user_id = Present 1 } }
+todo_required_args : CreateTodo -> UserData -> InsertTodoOneRequiredArguments
+todo_required_args todo user =
+    { object = { id = Absent, name = Present todo.name, user_id = Present user.id } }
 
 
-todo_create_mutation : CreateTodo -> SelectionSet (Maybe TodoData) RootMutation
-todo_create_mutation todo =
-    BAPIMutation.insert_todo_one identity (todo_required_args todo) create_todo_data_selection
+todo_create_mutation : CreateTodo -> UserData -> SelectionSet (Maybe TodoData) RootMutation
+todo_create_mutation todo user =
+    BAPIMutation.insert_todo_one identity (todo_required_args todo user) create_todo_data_selection
 
 
-makeTodoRequest :
-    LoginResponse
-    -> CreateTodo
-    -> Cmd Msg
-makeTodoRequest token todo =
+makeTodoRequest : LoginResponse -> CreateTodo -> UserData -> Cmd Msg
+makeTodoRequest token todo user =
     let
         todo_mutation_query =
-            todo_create_mutation todo
+            todo_create_mutation todo user
 
         _ =
             Debug.log "creating todo" todo_mutation_query

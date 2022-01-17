@@ -49,7 +49,7 @@ update msg model =
                 Just route ->
                     case route of
                         LogoutR ->
-                            ( { new_model | token = Nothing }, Ports.logoutUser () )
+                            ( { new_model | token = Nothing, user_todos = NotAsked, user = Nothing }, Ports.logoutUser () )
 
                         _ ->
                             ( new_model, Cmd.none )
@@ -140,7 +140,12 @@ update msg model =
             ( model
             , case model.token of
                 Just token ->
-                    makeTodoRequest token model.create_todo
+                    case model.user of
+                        Just user ->
+                            makeTodoRequest token model.create_todo user
+
+                        Nothing ->
+                            Cmd.none
 
                 Nothing ->
                     Cmd.none
@@ -156,6 +161,13 @@ update msg model =
                         , case model.token of
                             Just token ->
                                 get_user_data_request token
+
+                            -- get user data
+                            Nothing ->
+                                Cmd.none
+                        , case model.token of
+                            Just token ->
+                                get_todo_data_request token
 
                             -- get user data
                             Nothing ->
