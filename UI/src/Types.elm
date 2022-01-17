@@ -7,10 +7,11 @@ import Routes exposing (Route)
 import Url
 
 
-type alias Token =
-    { access_token : String
-    , token_type : String
-    }
+
+-- type alias Token =
+--     { access_token : String
+--     , token_type : String
+--     }
 
 
 type alias Email =
@@ -48,11 +49,12 @@ init_register_form =
     }
 
 
-type alias User =
-    { name : String
-    , email : String
-    , token : Token
-    }
+
+-- type alias User =
+--     { name : String
+--     , email : String
+--     , token : Token
+--     }
 
 
 type alias Todo =
@@ -75,6 +77,10 @@ type alias MaybeSignupResponse =
     Maybe SignupResponse
 
 
+
+-- type alias Token = String
+
+
 type alias LoginResponse =
     { token : String }
 
@@ -89,13 +95,19 @@ type alias LoginFormData =
     }
 
 
-type alias UserData = {id: Int, username: String}
-type alias TodoData = {id: Int, name: String }
+type alias UserData =
+    { id : Int, username : String }
+
+
+type alias TodoData =
+    { id : Int, name : String }
+
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , token : MaybeLoginResponse
-    , user : Maybe UserData 
+    , user : Maybe UserData
     , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , route : Maybe Route
     , signup_user : SignupUserForm

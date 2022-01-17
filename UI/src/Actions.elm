@@ -26,7 +26,7 @@ onUrlChange url =
 type Msg
     = NoOp
     | HelloWorld (WebData String)
-    | ReadLoginToken (WebData Token)
+      -- | ReadLoginToken (WebData Token)
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | GetWebDataExample (WebData (List Todo))

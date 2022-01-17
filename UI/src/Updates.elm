@@ -42,16 +42,20 @@ update msg model =
 
         UrlChanged url ->
             let
-                new_model =  { model | url = url, route = Url.Parser.parse routeParser url }
+                new_model =
+                    { model | url = url, route = Url.Parser.parse routeParser url }
             in
-                case new_model.route of 
-                    Just route -> 
-                        case route of 
-                            LogoutR -> ({new_model | token = Nothing}, Ports.logoutUser ())
-                            _ -> (new_model, Cmd.none)
-                    _ -> (new_model, Cmd.none)
+            case new_model.route of
+                Just route ->
+                    case route of
+                        LogoutR ->
+                            ( { new_model | token = Nothing }, Ports.logoutUser () )
 
-          
+                        _ ->
+                            ( new_model, Cmd.none )
+
+                _ ->
+                    ( new_model, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -75,11 +79,10 @@ update msg model =
             , Cmd.none
             )
 
-        ReadLoginToken _ ->
-            ( model
-            , Cmd.none
-            )
-
+        -- ReadLoginToken _ ->
+        --     ( model
+        --     , Cmd.none
+        --     )
         SignupResponseAction resp ->
             let
                 _ =
@@ -137,9 +140,13 @@ update msg model =
                     , Cmd.batch
                         [ save_token_to_local_storage maybe_tok
                         , Nav.pushUrl model.key "/"
-                        , case model.token of 
-                            Just token -> get_user_data_request token -- get user data 
-                            Nothing -> Cmd.none
+                        , case model.token of
+                            Just token ->
+                                get_user_data_request token
+
+                            -- get user data
+                            Nothing ->
+                                Cmd.none
                         ]
                     )
 
@@ -178,27 +185,33 @@ update msg model =
             , Cmd.none
             )
 
-        GetUserDataResult resp -> 
-            case resp of 
-                Success users -> 
-                    case List.head users of 
-                        Just user -> 
-                            let 
-                                _ = Debug.log "user" user 
-                            in 
-                            ({model | user = Just user}, 
-                                case model.token of 
-                                    Just token -> get_todo_data_request token
-                                    Nothing -> Cmd.none
-                            )
-                        Nothing -> 
-                            ({model | token = Nothing }, Cmd.none)
-                _ -> 
-                    ({model | token = Nothing }, Cmd.none)
+        GetUserDataResult resp ->
+            case resp of
+                Success users ->
+                    case List.head users of
+                        Just user ->
+                            let
+                                _ =
+                                    Debug.log "user" user
+                            in
+                            ( { model | user = Just user }
+                            , case model.token of
+                                Just token ->
+                                    get_todo_data_request token
 
-            
-        GetTodoDataResult resp -> 
-            let 
-                _ = Debug.log "todo resp" resp 
-            in 
-            ({model | user_todos = resp }, Cmd.none)
+                                Nothing ->
+                                    Cmd.none
+                            )
+
+                        Nothing ->
+                            ( { model | token = Nothing }, Cmd.none )
+
+                _ ->
+                    ( { model | token = Nothing }, Cmd.none )
+
+        GetTodoDataResult resp ->
+            let
+                _ =
+                    Debug.log "todo resp" resp
+            in
+            ( { model | user_todos = resp }, Cmd.none )

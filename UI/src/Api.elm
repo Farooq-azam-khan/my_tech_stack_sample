@@ -49,16 +49,14 @@ login_dummy_data =
     ]
 
 
-login_action : Cmd Msg
-login_action =
-    Http.post
-        { url = backend_host ++ "/user/token"
-        , body = Http.stringBody "application/x-www-form-urlencoded" (formUrlencoded login_dummy_data)
-        , expect = Http.expectJson (RemoteData.fromResult >> ReadLoginToken) decode_login_token
-        }
 
-
-
+-- login_action : Cmd Msg
+-- login_action =
+--     Http.post
+--         { url = backend_host ++ "/user/token"
+--         , body = Http.stringBody "application/x-www-form-urlencoded" (formUrlencoded login_dummy_data)
+--         , expect = Http.expectJson (RemoteData.fromResult >> ReadLoginToken) decode_login_token
+--         }
 -- post_example : SomeDataTypeToSend -> Cmd Msg
 -- post_example data =
 --     Http.post
@@ -93,17 +91,12 @@ formUrlencoded object =
 --            , ("datafield2", E.string data.y)
 --            , ("boolean", E.bool data.b)
 --            ]
-
-
-token_encoder : Token -> E.Value
-token_encoder token =
-    E.object
-        [ ( "access_token", E.string token.access_token )
-        , ( "token_type", E.string token.token_type )
-        ]
-
-
-
+-- token_encoder : Token -> E.Value
+-- token_encoder token =
+--     E.object
+--         [ ( "access_token", E.string token.access_token )
+--         , ( "token_type", E.string token.token_type )
+--         ]
 -- DECODERS
 
 
@@ -112,12 +105,10 @@ decodeHW =
     D.string
 
 
-decode_login_token : D.Decoder Token
-decode_login_token =
-    D.map2 Token (D.field "access_token" D.string) (D.field "token_type" D.string)
 
-
-
+-- decode_login_token : D.Decoder Token
+-- decode_login_token =
+--     D.map2 Token (D.field "access_token" D.string) (D.field "token_type" D.string)
 -- Graphql
 
 
