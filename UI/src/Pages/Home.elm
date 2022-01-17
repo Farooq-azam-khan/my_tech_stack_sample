@@ -3,6 +3,7 @@ module Pages.Home exposing (..)
 import Actions exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick, onInput)
 import RemoteData exposing (..)
 import Types exposing (..)
 
@@ -22,12 +23,14 @@ home_page model =
                             [ class "shadow appearance-none border rounded w-full py-4 px-4 text-grey-darker"
                             , id "todo_name"
                             , placeholder "what would you like todo?"
+                            , onInput UpdateTodoCreationName
                             , type_ "text"
                             ]
                             []
                         , button
                             [ class "bg-black text-white px-3 py-2 rounded-md uppercase text-sm shadow-md hover:shadow-xl font-semibold"
                             , type_ "button"
+                            , onClick CreateTodoAction
                             ]
                             [ text "Create TODO"
                             ]

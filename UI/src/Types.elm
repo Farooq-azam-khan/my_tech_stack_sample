@@ -115,6 +115,10 @@ type alias Flag =
     { token : MaybeLoginResponse }
 
 
+type alias CreateTodo =
+    { name : String }
+
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
@@ -122,6 +126,7 @@ type alias Model =
     , user : Maybe UserData
     , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , route : Maybe Route
+    , create_todo : CreateTodo
     , signup_user : SignupUserForm
     , login_user : LoginFormData
     }

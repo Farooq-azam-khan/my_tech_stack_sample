@@ -8,12 +8,14 @@ import AnonAPI.Mutation exposing (LoginRequiredArguments, SignupRequiredArgument
 import AnonAPI.Object exposing (CreateUserOutput, JsonWebToken)
 import AnonAPI.Object.CreateUserOutput as CreateUserOutputObj
 import AnonAPI.Object.JsonWebToken as JsonWebTokenObj
+import BackendAPI.Mutation as BAPIMutation exposing (InsertTodoOneRequiredArguments)
 import BackendAPI.Object
 import BackendAPI.Object.Todo as BAPIObjTodo
 import BackendAPI.Object.User as BAPIObjUser
 import BackendAPI.Query as BAPIQuery
 import Graphql.Http
 import Graphql.Operation exposing (RootMutation, RootQuery)
+import Graphql.OptionalArgument exposing (..)
 import Graphql.SelectionSet as SelectionSet exposing (SelectionSet)
 import Http
 import Json.Decode as D
@@ -240,3 +242,49 @@ get_todo_data_request token =
         |> Graphql.Http.queryRequest graphql_url
         |> generate_authorization_header token
         |> Graphql.Http.send (RemoteData.fromResult >> GetTodoDataResult)
+
+
+
+-- create todo
+{-
+   mutation MyMutation {
+     insert_todo_one(object: {name: "asdf", user_id: 1}) {
+       id
+       name
+     }
+   }
+
+-}
+
+
+create_todo_data_selection : SelectionSet TodoData BackendAPI.Object.Todo
+create_todo_data_selection =
+    SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
+
+
+todo_required_args : CreateTodo -> InsertTodoOneRequiredArguments
+todo_required_args todo =
+    { object = { id = Absent, name = Present todo.name, user_id = Present 1 } }
+
+
+todo_create_mutation : CreateTodo -> SelectionSet (Maybe TodoData) RootMutation
+todo_create_mutation todo =
+    BAPIMutation.insert_todo_one identity (todo_required_args todo) create_todo_data_selection
+
+
+makeTodoRequest :
+    LoginResponse
+    -> CreateTodo
+    -> Cmd Msg
+makeTodoRequest token todo =
+    let
+        todo_mutation_query =
+            todo_create_mutation todo
+
+        _ =
+            Debug.log "creating todo" todo_mutation_query
+    in
+    todo_mutation_query
+        |> Graphql.Http.mutationRequest graphql_url
+        |> generate_authorization_header token
+        |> Graphql.Http.send (RemoteData.fromResult >> GetTodoDataCreationResult)

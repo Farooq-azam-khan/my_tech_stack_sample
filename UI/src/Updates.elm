@@ -133,6 +133,19 @@ update msg model =
             , makeLoginRequest model.login_user.username model.login_user.password
             )
 
+        CreateTodoAction ->
+            -- if String.length model.create_todo.name <= 2 then
+            --     ( model, Cmd.none )
+            -- else
+            ( model
+            , case model.token of
+                Just token ->
+                    makeTodoRequest token model.create_todo
+
+                Nothing ->
+                    Cmd.none
+            )
+
         LoginResponseAction resp ->
             case resp of
                 Success maybe_tok ->
@@ -215,3 +228,41 @@ update msg model =
                     Debug.log "todo resp" resp
             in
             ( { model | user_todos = resp }, Cmd.none )
+
+        GetTodoDataCreationResult resp ->
+            let
+                user_todos =
+                    case model.user_todos of
+                        Success todos ->
+                            todos
+
+                        _ ->
+                            []
+
+                new_user_todos =
+                    case resp of
+                        Success added_todos ->
+                            case added_todos of
+                                Just todo ->
+                                    List.append user_todos [ todo ]
+
+                                Nothing ->
+                                    user_todos
+
+                        _ ->
+                            user_todos
+
+                _ =
+                    Debug.log "todo creation" resp
+            in
+            ( { model | user_todos = Success new_user_todos }, Cmd.none )
+
+        UpdateTodoCreationName todo_name ->
+            let
+                ct =
+                    model.create_todo
+
+                new_ct =
+                    { ct | name = todo_name }
+            in
+            ( { model | create_todo = new_ct }, Cmd.none )
