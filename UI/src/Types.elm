@@ -32,6 +32,18 @@ type alias Email =
 --     }
 
 
+type alias Token =
+    String
+
+
+type alias Username =
+    String
+
+
+type alias Password =
+    String
+
+
 type alias RegisterForm =
     { name : String
     , password : String
@@ -77,12 +89,8 @@ type alias MaybeSignupResponse =
     Maybe SignupResponse
 
 
-
--- type alias Token = String
-
-
 type alias LoginResponse =
-    { token : String }
+    { token : Token }
 
 
 type alias MaybeLoginResponse =
@@ -90,13 +98,13 @@ type alias MaybeLoginResponse =
 
 
 type alias LoginFormData =
-    { username : String
-    , password : String
+    { username : Username
+    , password : Password
     }
 
 
 type alias UserData =
-    { id : Int, username : String }
+    { id : Int, username : Username }
 
 
 type alias TodoData =
