@@ -7,6 +7,10 @@ import AnonAPI.Mutation exposing (LoginRequiredArguments, SignupRequiredArgument
 import AnonAPI.Object exposing (CreateUserOutput, JsonWebToken)
 import AnonAPI.Object.CreateUserOutput as CreateUserOutputObj
 import AnonAPI.Object.JsonWebToken as JsonWebTokenObj
+import BackendAPI.Object exposing (Todo, User)
+import BackendAPI.Object.Todo as BAPIObjTodo
+import BackendAPI.Object.User as BAPIObjUser
+import BackendAPI.Query as BAPIQuery
 import Graphql.Http
 import Graphql.Operation exposing (RootMutation, RootQuery)
 import Graphql.SelectionSet as SelectionSet exposing (SelectionSet)
@@ -15,11 +19,7 @@ import Json.Decode as D
 import Json.Encode as E
 import RemoteData exposing (..)
 import Types exposing (..)
-import BackendAPI.Query as BAPIQuery
 
-import BackendAPI.Object exposing (User, Todo)
-import BackendAPI.Object.User as BAPIObjUser
-import BackendAPI.Object.Todo as BAPIObjTodo
 
 backend_host : String
 backend_host =
@@ -193,53 +193,60 @@ makeLoginRequest username password =
 
 
 
-
 -- get user data
 {-
-query MyQuery {
-  user {
-    id
-    username
-  }
-}
+   query MyQuery {
+     user {
+       id
+       username
+     }
+   }
 -}
 
 
-user_data_selection : SelectionSet UserData User
-user_data_selection = SelectionSet.map2 UserData BAPIObjUser.id BAPIObjUser.username
+user_data_selection : SelectionSet UserData BackendAPI.Object.User
+user_data_selection =
+    SelectionSet.map2 UserData BAPIObjUser.id BAPIObjUser.username
+
 
 user_data_query : SelectionSet (List UserData) RootQuery
-user_data_query = BAPIQuery.user identity user_data_selection
+user_data_query =
+    BAPIQuery.user identity user_data_selection
 
-get_user_data_request : LoginResponse -> Cmd Msg 
-get_user_data_request token = 
+
+get_user_data_request : LoginResponse -> Cmd Msg
+get_user_data_request token =
     user_data_query
         |> Graphql.Http.queryRequest graphql_url
-        |> Graphql.Http.withHeader "Authorization" ("Bearer "++ token.token)
+        |> Graphql.Http.withHeader "Authorization" ("Bearer " ++ token.token)
         |> Graphql.Http.send (RemoteData.fromResult >> GetUserDataResult)
 
-    
+
+
 -- get todo data
 {-
-query MyQuery {
-  todo {
-    name
-    id
-  }
-}
+   query MyQuery {
+     todo {
+       name
+       id
+     }
+   }
 -}
 
 
-todo_data_selection : SelectionSet TodoData Todo
-todo_data_selection = SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
+todo_data_selection : SelectionSet TodoData BackendAPI.Object.Todo
+todo_data_selection =
+    SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
+
 
 todo_data_query : SelectionSet (List TodoData) RootQuery
-todo_data_query = BAPIQuery.todo identity todo_data_selection
+todo_data_query =
+    BAPIQuery.todo identity todo_data_selection
 
-get_todo_data_request : LoginResponse -> Cmd Msg 
-get_todo_data_request token = 
+
+get_todo_data_request : LoginResponse -> Cmd Msg
+get_todo_data_request token =
     todo_data_query
         |> Graphql.Http.queryRequest graphql_url
-        |> Graphql.Http.withHeader "Authorization" ("Bearer "++ token.token)
+        |> Graphql.Http.withHeader "Authorization" ("Bearer " ++ token.token)
         |> Graphql.Http.send (RemoteData.fromResult >> GetTodoDataResult)
-        
