@@ -57,13 +57,16 @@ home_page model =
         ]
 
 
-todo_component : TodoData -> Html msg
+todo_component : TodoData -> Html Msg
 todo_component todo =
     li
-        [ class "bg-white rounded-md p-5" ]
+        [ class "flex items-center justify-between bg-white rounded-md p-5" ]
         [ h3
             [ class "text-lg hover:text-indigo-700" ]
             [ a [ class "", "/todo/" ++ String.fromInt todo.id |> href ] [ text todo.name ] ]
+
+        -- todo modal (are you sure?)
+        , button [ onClick <| DeleteTodo todo.id, class "text-white bg-indigo-800 hover:bg-indigo-900 px-3 py-2 rounded-md shadow-lg hover:shadow-xl" ] [ text "Delete" ]
         ]
 
 

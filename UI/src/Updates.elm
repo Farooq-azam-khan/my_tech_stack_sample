@@ -280,3 +280,10 @@ update msg model =
                     { ct | name = todo_name }
             in
             ( { model | create_todo = new_ct }, Cmd.none )
+
+        DeleteTodo todo_id ->
+            let
+                _ =
+                    Debug.log "deleting" todo_id
+            in
+            ( model, Cmd.none )
