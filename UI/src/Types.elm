@@ -114,6 +114,7 @@ type alias TodoId =
 type alias TodoData =
     { id : TodoId
     , name : String
+    , completed : Bool
     }
 
 
