@@ -278,8 +278,8 @@ makeTodoRequest todo token user =
         todo_mutation_query =
             todo_create_mutation todo user
 
-        _ =
-            Debug.log "creating todo" todo_mutation_query
+        -- _ =
+        --     Debug.log "creating todo" todo_mutation_query
     in
     todo_mutation_query
         |> Graphql.Http.mutationRequest graphql_url

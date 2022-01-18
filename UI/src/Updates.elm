@@ -132,13 +132,10 @@ update msg model =
                     , Cmd.batch
                         [ save_token_to_local_storage maybe_tok
                         , Nav.pushUrl model.key "/"
-                        , case model.token of
-                            Just token ->
-                                get_user_data_request token
-
-                            -- get user data
-                            Nothing ->
-                                Cmd.none
+                        , Maybe.map 
+                            (get_user_data_request) 
+                            model.token 
+                        |> Maybe.withDefault Cmd.none
                         ]
                     )
 
@@ -214,29 +211,27 @@ update msg model =
                 clear_create_form =
                     { name = "" }
 
-                user_todos =
-                    case model.user_model.user_todos of
-                        Success todos ->
-                            todos
-
-                        _ ->
-                            []
+                user_todos = RemoteData.toMaybe model.user_model.user_todos  
+                                |> Maybe.map identity 
+                                |> Maybe.withDefault [] 
 
                 new_user_todos =
                     case resp of
                         Success added_todos ->
-                            case added_todos of
-                                Just todo ->
+                            Maybe.map 
+                                (\todo ->
                                     List.append user_todos [ todo ]
-
-                                Nothing ->
-                                    user_todos
+                                ) added_todos
+                            |> Maybe.withDefault user_todos
 
                         _ ->
                             user_todos
                 
                 user_model = model.user_model 
-                new_user_model = {user_model | user_todos = Success new_user_todos, create_todo = clear_create_form}
+                new_user_model = { user_model 
+                                    | user_todos = Success new_user_todos
+                                    , create_todo = clear_create_form
+                                    }
             in
             ( { model | user_model = new_user_model }
             , Cmd.none 
@@ -244,10 +239,8 @@ update msg model =
 
         UpdateTodoCreationName todo_name ->
             let
-                ct = model.user_model.create_todo
-                new_ct = { ct | name = todo_name }
                 user_model = model.user_model 
-                new_user_model = {user_model | create_todo = new_ct}
+                new_user_model = {user_model | create_todo = {name = todo_name }}
             in
             ( { model | user_model = new_user_model }
             , Cmd.none 
@@ -267,12 +260,12 @@ update msg model =
                 new_todo_list =
                     case resp of
                         Success maybe_todos ->
-                            case maybe_todos of
-                                Just todo ->
-                                    List.filter (\t -> not <| t.id == todo.id) todo_list
-
-                                Nothing ->
-                                    todo_list
+                            Maybe.map 
+                                (\todo ->
+                                    List.filter (\t -> t.id == todo.id |> not) todo_list
+                                ) 
+                                maybe_todos
+                                |> Maybe.withDefault todo_list
 
                         _ ->
                             todo_list
