@@ -32,12 +32,12 @@ backend_host =
 -- -- API
 
 
-get_hw : Cmd Msg
-get_hw =
-    Http.get
-        { url = backend_host ++ "/hw"
-        , expect = Http.expectJson (RemoteData.fromResult >> HelloWorld) decodeHW
-        }
+-- get_hw : Cmd Msg
+-- get_hw =
+--     Http.get
+--         { url = backend_host ++ "/hw"
+--         , expect = Http.expectJson (RemoteData.fromResult >> HelloWorld) decodeHW
+--         }
 
 
 
@@ -140,10 +140,10 @@ signup_decoder =
         CreateUserOutputObj.id
 
 
-login_decoder : SelectionSet LoginResponse JsonWebToken
+login_decoder : SelectionSet Token JsonWebToken
 login_decoder =
     SelectionSet.map
-        Types.LoginResponse
+        Types.Token
         JsonWebTokenObj.token
 
 
@@ -165,12 +165,12 @@ makeSignupRequest username password =
 -- login
 
 
-generate_authorization_header : LoginResponse -> Graphql.Http.Request decodesTo -> Graphql.Http.Request decodesTo
+generate_authorization_header : Token -> Graphql.Http.Request decodesTo -> Graphql.Http.Request decodesTo
 generate_authorization_header token =
     Graphql.Http.withHeader "Authorization" ("Bearer " ++ token.token)
 
 
-loginMutation : String -> String -> SelectionSet MaybeLoginResponse RootMutation
+loginMutation : String -> String -> SelectionSet MaybeToken RootMutation
 loginMutation username password =
     login
         (loginArgs username password)
@@ -206,7 +206,7 @@ user_data_query =
     BAPIQuery.user identity user_data_selection
 
 
-get_user_data_request : LoginResponse -> Cmd Msg
+get_user_data_request : Token -> Cmd Msg
 get_user_data_request token =
     user_data_query
         |> Graphql.Http.queryRequest graphql_url
@@ -236,7 +236,7 @@ todo_data_query =
     BAPIQuery.todo identity todo_data_selection
 
 
-get_todo_data_request : LoginResponse -> Cmd Msg
+get_todo_data_request : Token -> Cmd Msg
 get_todo_data_request token =
     todo_data_query
         |> Graphql.Http.queryRequest graphql_url
@@ -272,7 +272,7 @@ todo_create_mutation todo user =
     BAPIMutation.insert_todo_one identity (todo_required_args todo user) create_todo_data_selection
 
 
-makeTodoRequest : LoginResponse -> CreateTodo -> UserData -> Cmd Msg
+makeTodoRequest : Token -> CreateTodo -> UserData -> Cmd Msg
 makeTodoRequest token todo user =
     let
         todo_mutation_query =
@@ -296,7 +296,7 @@ todo_delete_mutation todo_id =
     BAPIMutation.delete_todo_by_pk { id = todo_id } create_todo_data_selection
 
 
-delete_user_todo : LoginResponse -> TodoId -> Cmd Msg
+delete_user_todo : Token -> TodoId -> Cmd Msg
 delete_user_todo token todo_id =
     todo_delete_mutation todo_id
         |> Graphql.Http.mutationRequest graphql_url
@@ -333,7 +333,7 @@ todo_update_mutation todo_id current_completed_value =
         create_todo_data_selection
 
 
-update_todo_completion : LoginResponse -> TodoId -> Bool -> Cmd Msg
+update_todo_completion : Token -> TodoId -> Bool -> Cmd Msg
 update_todo_completion token todo_id current_completed_value =
     todo_update_mutation todo_id current_completed_value
         |> Graphql.Http.mutationRequest graphql_url

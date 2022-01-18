@@ -20,3 +20,4 @@
 * [x] edit a todo
 * [x] todo detail page
 * [x] mark todo as completed
+* [x] refactor 

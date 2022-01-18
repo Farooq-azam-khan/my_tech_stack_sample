@@ -32,8 +32,8 @@ type alias Email =
 --     }
 
 
-type alias Token =
-    String
+-- type alias Token =
+--     String
 
 
 type alias Username =
@@ -89,12 +89,11 @@ type alias MaybeSignupResponse =
     Maybe SignupResponse
 
 
-type alias LoginResponse =
-    { token : Token }
+type alias Token = { token:String } 
 
 
-type alias MaybeLoginResponse =
-    Maybe LoginResponse
+type alias MaybeToken =
+    Maybe Token
 
 
 type alias LoginFormData =
@@ -119,21 +118,27 @@ type alias TodoData =
 
 
 type alias Flag =
-    { token : MaybeLoginResponse }
+    { token : MaybeToken }
 
 
 type alias CreateTodo =
     { name : String }
 
+type alias UserModel = 
+    { user_data : Maybe UserData
+    , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
+    , create_todo : CreateTodo
+    }
 
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
-    , token : MaybeLoginResponse
-    , user : Maybe UserData
-    , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
+    , token : MaybeToken
+    , user_model : UserModel 
+    -- , user : Maybe UserData
+    -- , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , route : Maybe Route
-    , create_todo : CreateTodo
+    -- , create_todo : CreateTodo
     , signup_user : SignupUserForm
     , login_user : LoginFormData
     }

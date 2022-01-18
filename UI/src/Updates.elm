@@ -7,7 +7,6 @@ import Api exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import Helpers exposing (..)
-import Html exposing (i)
 import Ports
 import RemoteData exposing (..)
 import Routes exposing (Route(..), routeParser)
@@ -20,19 +19,13 @@ import Url.Parser
 -- UPDATE
 
 
-save_token_to_local_storage : MaybeLoginResponse -> Cmd msg
-save_token_to_local_storage token =
-    case token of
-        Just tok ->
-            Ports.storeTokenData tok
-
-        Nothing ->
-            Cmd.none
-
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
@@ -44,22 +37,19 @@ update msg model =
         UrlChanged url ->
             let
                 new_model =
-                    { model | url = url, route = Url.Parser.parse routeParser url }
+                    { model | url = url
+                    , route = Url.Parser.parse routeParser url 
+                    }
             in
             case new_model.route of
                 Just route ->
                     case route of
                         LogoutR ->
-                            ( { new_model | token = Nothing, user_todos = NotAsked, user = Nothing }, Ports.logoutUser () )
+                            logout_route_chage_update new_model 
 
                         HomeR ->
-                            case model.token of
-                                Just token ->
-                                    ( { new_model | user_todos = Loading }, get_todo_data_request token )
-
-                                -- get user data
-                                Nothing ->
-                                    ( new_model, Cmd.none )
+                            home_route_change_update new_model 
+                            
 
                         _ ->
                             ( new_model, Cmd.none )
@@ -67,40 +57,21 @@ update msg model =
                 _ ->
                     ( new_model, Cmd.none )
 
-        NoOp ->
-            ( model, Cmd.none )
+        
 
         GetWebDataExample _ ->
             ( model
             , Cmd.none
             )
 
-        GetDetailedErrorActionExample _ ->
+        GetDetailedErrorActionExample _ -> -- can debug.log the _ 
             ( model
             , Cmd.none
             )
 
-        HelloWorld wb ->
-            let
-                _ =
-                    Debug.log "wb" wb
-            in
-            ( model
-            , Cmd.none
-            )
-
-        -- ReadLoginToken _ ->
-        --     ( model
-        --     , Cmd.none
-        --     )
         SignupResponseAction resp ->
-            let
-                _ =
-                    Debug.log "signup resp" resp
-            in
-            case resp of
-                Success _ ->
-                    ( { model
+            Maybe.map 
+                (\_ -> ( { model
                         | route = Just HomeR
                         , signup_user =
                             { password = ""
@@ -109,9 +80,9 @@ update msg model =
                       }
                     , Cmd.none
                     )
-
-                _ ->
-                    ( model, Cmd.none )
+                )
+                (RemoteData.toMaybe resp)
+            |> Maybe.withDefault (model, Cmd.none)
 
         RegisterUserAction username password ->
             ( model
@@ -144,26 +115,18 @@ update msg model =
             )
 
         CreateTodoAction ->
-            -- if String.length model.create_todo.name <= 2 then
-            --     ( model, Cmd.none )
-            -- else
-            ( model
-            , case model.token of
-                Just token ->
-                    case model.user of
-                        Just user ->
-                            if model.create_todo.name == "" then
-                                Cmd.none
+            if model.user_model.create_todo.name == "" then (model, Cmd.none)
+            else 
+                ( model
+                , case model.token of
+                    Just token ->
+                        Maybe.map 
+                            (\user -> makeTodoRequest token model.user_model.create_todo user) model.user_model.user_data
+                        |> Maybe.withDefault Cmd.none
 
-                            else
-                                makeTodoRequest token model.create_todo user
-
-                        Nothing ->
-                            Cmd.none
-
-                Nothing ->
-                    Cmd.none
-            )
+                    Nothing ->
+                        Cmd.none
+                )
 
         LoginResponseAction resp ->
             case resp of
@@ -222,7 +185,12 @@ update msg model =
                 Success users ->
                     case List.head users of
                         Just user ->
-                            ( { model | user = Just user }
+                            let
+                                user_model = model.user_model 
+                                new_user_model = {user_model | user_data = Just user}
+
+                            in 
+                            ( { model | user_model = new_user_model }
                             , case model.token of
                                 Just token ->
                                     get_todo_data_request token
@@ -238,7 +206,11 @@ update msg model =
                     ( { model | token = Nothing }, Cmd.none )
 
         GetTodoDataResult resp ->
-            ( { model | user_todos = resp }, Cmd.none )
+            let
+                user_model = model.user_model 
+                new_user_model = {user_model | user_todos = resp}
+            in 
+            ( { model | user_model = new_user_model }, Cmd.none )
 
         GetTodoDataCreationResult resp ->
             let
@@ -246,7 +218,7 @@ update msg model =
                     { name = "" }
 
                 user_todos =
-                    case model.user_todos of
+                    case model.user_model.user_todos of
                         Success todos ->
                             todos
 
@@ -265,38 +237,35 @@ update msg model =
 
                         _ ->
                             user_todos
+                
+                user_model = model.user_model 
+                new_user_model = {user_model | user_todos = Success new_user_todos, create_todo = clear_create_form}
             in
-            ( { model | user_todos = Success new_user_todos, create_todo = clear_create_form }, Cmd.none )
+            ( { model | user_model = new_user_model }
+            , Cmd.none 
+            )
 
         UpdateTodoCreationName todo_name ->
             let
-                ct =
-                    model.create_todo
-
-                new_ct =
-                    { ct | name = todo_name }
+                ct = model.user_model.create_todo
+                new_ct = { ct | name = todo_name }
+                user_model = model.user_model 
+                new_user_model = {user_model | create_todo = new_ct}
             in
-            ( { model | create_todo = new_ct }, Cmd.none )
+            ( { model | user_model = new_user_model }
+            , Cmd.none 
+            )
 
         DeleteTodo todo_id ->
             ( model
-            , case model.token of
-                Just token ->
-                    delete_user_todo token todo_id
-
-                Nothing ->
-                    Cmd.none
+            , Maybe.map 
+                (\token -> delete_user_todo token todo_id) model.token 
+                |> Maybe.withDefault Cmd.none
             )
 
         TodoDataDeletionResult resp ->
             let
-                todo_list =
-                    case model.user_todos of
-                        Success todos ->
-                            todos
-
-                        _ ->
-                            []
+                todo_list = RemoteData.toMaybe model.user_model.user_todos |> Maybe.withDefault [] 
 
                 new_todo_list =
                     case resp of
@@ -310,44 +279,54 @@ update msg model =
 
                         _ ->
                             todo_list
+                user_model = model.user_model 
+                new_user_model = {user_model | user_todos = Success new_todo_list}
             in
-            ( { model | user_todos = Success new_todo_list }, Cmd.none )
+            ( { model | user_model = new_user_model  }, Cmd.none )
 
         UpdateTodoAction todo_id current_completed_value ->
             ( model
-            , case model.token of
-                Just token ->
-                    update_todo_completion token todo_id (not current_completed_value)
-
-                Nothing ->
-                    Cmd.none
+            , Maybe.map 
+                (\token -> update_todo_completion token todo_id (not current_completed_value)) model.token 
+                |> Maybe.withDefault Cmd.none 
             )
 
         TodoDataUpdateResult resp ->
             let
-                new_model =
-                    case resp of
-                        Success maybe_todo_updated ->
-                            case maybe_todo_updated of
-                                Just todo ->
-                                    case model.user_todos of
-                                        Success todos ->
-                                            let
-                                                filter_updated_todo =
-                                                    List.filter (\t -> not <| t.id == todo.id) todos
-
-                                                updated_todos =
-                                                    List.append filter_updated_todo [ todo ]
-                                            in
-                                            { model | user_todos = Success updated_todos }
-
-                                        _ ->
-                                            model
-
-                                Nothing ->
-                                    model
-
-                        _ ->
-                            model
+                updated_todo =  case RemoteData.toMaybe resp of 
+                                    Just maybe_todo -> 
+                                        Maybe.map2 
+                                            replace_todo_with_updated_value
+                                            maybe_todo
+                                            (RemoteData.toMaybe model.user_model.user_todos)
+                                        |> Maybe.withDefault [] 
+                                    Nothing -> []
+                user_model = model.user_model 
+                new_user_model = {user_model | user_todos = Success updated_todo}
             in
-            ( new_model, Cmd.none )
+            ( {model | user_model = new_user_model}, Cmd.none )
+
+-- Route Updates 
+
+home_route_change_update : Model -> (Model, Cmd Msg)
+home_route_change_update model = 
+    Maybe.map 
+        (\token -> 
+            let 
+                user_model = model.user_model 
+                new_user_model = {user_model | user_todos = Loading}
+            in 
+            ( { model | user_model = new_user_model }
+            , get_todo_data_request token 
+            )
+        )
+        model.token 
+    |> Maybe.withDefault (model, Cmd.none)
+
+logout_route_chage_update : Model -> (Model, Cmd Msg)
+logout_route_chage_update model = 
+    ( { model | token = Nothing
+        , user_model = {user_data = Nothing, user_todos = NotAsked, create_todo = {name = ""}}
+        }
+    , Ports.logoutUser () 
+    )

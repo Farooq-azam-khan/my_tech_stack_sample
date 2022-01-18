@@ -25,8 +25,6 @@ onUrlChange url =
 
 type Msg
     = NoOp
-    | HelloWorld (WebData String)
-      -- | ReadLoginToken (WebData Token)
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | GetWebDataExample (WebData (List Todo))
@@ -37,7 +35,7 @@ type Msg
     | UpdateSignupPassword String
     | LoginFormAction
     | CreateTodoAction
-    | LoginResponseAction (RemoteData (Graphql.Http.Error MaybeLoginResponse) MaybeLoginResponse)
+    | LoginResponseAction (RemoteData (Graphql.Http.Error MaybeToken) MaybeToken)
     | UpdateLoginUsername String
     | UpdateLoginPassword String
     | GetUserDataResult (RemoteData (Graphql.Http.Error (List UserData)) (List UserData))

@@ -45,9 +45,10 @@ init flags url key =
             , key = key
             , route = parse routeParser url
             , token = flags.token
-            , user = Nothing
-            , user_todos = Loading
-            , create_todo = { name = "" }
+            , user_model =  { user_data = Nothing
+                            , user_todos = NotAsked
+                            , create_todo = {name = ""}
+                            }
             , signup_user = SignupUserForm "" ""
             , login_user = LoginFormData "" ""
             }

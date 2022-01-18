@@ -24,7 +24,7 @@ home_page model =
                             , id "todo_name"
                             , placeholder "what would you like todo?"
                             , onInput UpdateTodoCreationName
-                            , value model.create_todo.name
+                            , value model.user_model.create_todo.name
                             , type_ "text"
                             ]
                             []
@@ -36,7 +36,7 @@ home_page model =
                             [ text "Create TODO"
                             ]
                         ]
-                    , case model.user_todos of
+                    , case model.user_model.user_todos of
                         Success todos ->
                             if List.length todos == 0 then
                                 div [ class "flex items-center justify-center bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full" ]
