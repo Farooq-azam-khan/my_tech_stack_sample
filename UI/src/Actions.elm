@@ -46,3 +46,5 @@ type Msg
     | UpdateTodoCreationName String
     | DeleteTodo Int
     | TodoDataDeletionResult (RemoteData (Graphql.Http.Error (Maybe TodoData)) (Maybe TodoData))
+    | UpdateTodoAction TodoId Bool
+    | TodoDataUpdateResult (RemoteData (Graphql.Http.Error (Maybe TodoData)) (Maybe TodoData))

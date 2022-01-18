@@ -2,9 +2,54 @@
 -- https://github.com/dillonkearns/elm-graphql
 
 
-module BackendAPI.Scalar exposing (..)
+module BackendAPI.Scalar exposing (Codecs, Timestamptz(..), defaultCodecs, defineCodecs, unwrapCodecs, unwrapEncoder)
+
+import Graphql.Codec exposing (Codec)
+import Graphql.Internal.Builder.Object as Object
+import Graphql.Internal.Encode
+import Json.Decode as Decode exposing (Decoder)
+import Json.Encode as Encode
 
 
-placeholder : String
-placeholder =
-    ""
+type Timestamptz
+    = Timestamptz String
+
+
+defineCodecs :
+    { codecTimestamptz : Codec valueTimestamptz }
+    -> Codecs valueTimestamptz
+defineCodecs definitions =
+    Codecs definitions
+
+
+unwrapCodecs :
+    Codecs valueTimestamptz
+    -> { codecTimestamptz : Codec valueTimestamptz }
+unwrapCodecs (Codecs unwrappedCodecs) =
+    unwrappedCodecs
+
+
+unwrapEncoder :
+    (RawCodecs valueTimestamptz -> Codec getterValue)
+    -> Codecs valueTimestamptz
+    -> getterValue
+    -> Graphql.Internal.Encode.Value
+unwrapEncoder getter (Codecs unwrappedCodecs) =
+    (unwrappedCodecs |> getter |> .encoder) >> Graphql.Internal.Encode.fromJson
+
+
+type Codecs valueTimestamptz
+    = Codecs (RawCodecs valueTimestamptz)
+
+
+type alias RawCodecs valueTimestamptz =
+    { codecTimestamptz : Codec valueTimestamptz }
+
+
+defaultCodecs : RawCodecs Timestamptz
+defaultCodecs =
+    { codecTimestamptz =
+        { encoder = \(Timestamptz raw) -> Encode.string raw
+        , decoder = Object.scalarDecoder |> Decode.map Timestamptz
+        }
+    }

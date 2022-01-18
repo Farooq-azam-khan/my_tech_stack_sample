@@ -4,7 +4,16 @@
 
 module BackendAPI.ScalarCodecs exposing (..)
 
+import BackendAPI.Scalar exposing (defaultCodecs)
+import Json.Decode as Decode exposing (Decoder)
 
-placeholder : String
-placeholder =
-    ""
+
+type alias Timestamptz =
+    BackendAPI.Scalar.Timestamptz
+
+
+codecs : BackendAPI.Scalar.Codecs Timestamptz
+codecs =
+    BackendAPI.Scalar.defineCodecs
+        { codecTimestamptz = defaultCodecs.codecTimestamptz
+        }

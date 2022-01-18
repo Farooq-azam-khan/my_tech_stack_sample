@@ -20,6 +20,54 @@ import Graphql.SelectionSet exposing (SelectionSet)
 import Json.Decode as Decode
 
 
+buildBoolean_comparison_exp :
+    (Boolean_comparison_expOptionalFields -> Boolean_comparison_expOptionalFields)
+    -> Boolean_comparison_exp
+buildBoolean_comparison_exp fillOptionals____ =
+    let
+        optionals____ =
+            fillOptionals____
+                { eq_ = Absent, gt_ = Absent, gte_ = Absent, in_ = Absent, is_null_ = Absent, lt_ = Absent, lte_ = Absent, neq_ = Absent, nin_ = Absent }
+    in
+    { eq_ = optionals____.eq_, gt_ = optionals____.gt_, gte_ = optionals____.gte_, in_ = optionals____.in_, is_null_ = optionals____.is_null_, lt_ = optionals____.lt_, lte_ = optionals____.lte_, neq_ = optionals____.neq_, nin_ = optionals____.nin_ }
+
+
+type alias Boolean_comparison_expOptionalFields =
+    { eq_ : OptionalArgument Bool
+    , gt_ : OptionalArgument Bool
+    , gte_ : OptionalArgument Bool
+    , in_ : OptionalArgument (List Bool)
+    , is_null_ : OptionalArgument Bool
+    , lt_ : OptionalArgument Bool
+    , lte_ : OptionalArgument Bool
+    , neq_ : OptionalArgument Bool
+    , nin_ : OptionalArgument (List Bool)
+    }
+
+
+{-| Type for the Boolean\_comparison\_exp input object.
+-}
+type alias Boolean_comparison_exp =
+    { eq_ : OptionalArgument Bool
+    , gt_ : OptionalArgument Bool
+    , gte_ : OptionalArgument Bool
+    , in_ : OptionalArgument (List Bool)
+    , is_null_ : OptionalArgument Bool
+    , lt_ : OptionalArgument Bool
+    , lte_ : OptionalArgument Bool
+    , neq_ : OptionalArgument Bool
+    , nin_ : OptionalArgument (List Bool)
+    }
+
+
+{-| Encode a Boolean\_comparison\_exp into a value that can be used as an argument.
+-}
+encodeBoolean_comparison_exp : Boolean_comparison_exp -> Value
+encodeBoolean_comparison_exp input____ =
+    Encode.maybeObject
+        [ ( "_eq", Encode.bool |> Encode.optional input____.eq_ ), ( "_gt", Encode.bool |> Encode.optional input____.gt_ ), ( "_gte", Encode.bool |> Encode.optional input____.gte_ ), ( "_in", (Encode.bool |> Encode.list) |> Encode.optional input____.in_ ), ( "_is_null", Encode.bool |> Encode.optional input____.is_null_ ), ( "_lt", Encode.bool |> Encode.optional input____.lt_ ), ( "_lte", Encode.bool |> Encode.optional input____.lte_ ), ( "_neq", Encode.bool |> Encode.optional input____.neq_ ), ( "_nin", (Encode.bool |> Encode.list) |> Encode.optional input____.nin_ ) ]
+
+
 buildInt_comparison_exp :
     (Int_comparison_expOptionalFields -> Int_comparison_expOptionalFields)
     -> Int_comparison_exp
@@ -136,6 +184,54 @@ encodeString_comparison_exp input____ =
         [ ( "_eq", Encode.string |> Encode.optional input____.eq_ ), ( "_gt", Encode.string |> Encode.optional input____.gt_ ), ( "_gte", Encode.string |> Encode.optional input____.gte_ ), ( "_ilike", Encode.string |> Encode.optional input____.ilike_ ), ( "_in", (Encode.string |> Encode.list) |> Encode.optional input____.in_ ), ( "_iregex", Encode.string |> Encode.optional input____.iregex_ ), ( "_is_null", Encode.bool |> Encode.optional input____.is_null_ ), ( "_like", Encode.string |> Encode.optional input____.like_ ), ( "_lt", Encode.string |> Encode.optional input____.lt_ ), ( "_lte", Encode.string |> Encode.optional input____.lte_ ), ( "_neq", Encode.string |> Encode.optional input____.neq_ ), ( "_nilike", Encode.string |> Encode.optional input____.nilike_ ), ( "_nin", (Encode.string |> Encode.list) |> Encode.optional input____.nin_ ), ( "_niregex", Encode.string |> Encode.optional input____.niregex_ ), ( "_nlike", Encode.string |> Encode.optional input____.nlike_ ), ( "_nregex", Encode.string |> Encode.optional input____.nregex_ ), ( "_nsimilar", Encode.string |> Encode.optional input____.nsimilar_ ), ( "_regex", Encode.string |> Encode.optional input____.regex_ ), ( "_similar", Encode.string |> Encode.optional input____.similar_ ) ]
 
 
+buildTimestamptz_comparison_exp :
+    (Timestamptz_comparison_expOptionalFields -> Timestamptz_comparison_expOptionalFields)
+    -> Timestamptz_comparison_exp
+buildTimestamptz_comparison_exp fillOptionals____ =
+    let
+        optionals____ =
+            fillOptionals____
+                { eq_ = Absent, gt_ = Absent, gte_ = Absent, in_ = Absent, is_null_ = Absent, lt_ = Absent, lte_ = Absent, neq_ = Absent, nin_ = Absent }
+    in
+    { eq_ = optionals____.eq_, gt_ = optionals____.gt_, gte_ = optionals____.gte_, in_ = optionals____.in_, is_null_ = optionals____.is_null_, lt_ = optionals____.lt_, lte_ = optionals____.lte_, neq_ = optionals____.neq_, nin_ = optionals____.nin_ }
+
+
+type alias Timestamptz_comparison_expOptionalFields =
+    { eq_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , gt_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , gte_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , in_ : OptionalArgument (List BackendAPI.ScalarCodecs.Timestamptz)
+    , is_null_ : OptionalArgument Bool
+    , lt_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , lte_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , neq_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , nin_ : OptionalArgument (List BackendAPI.ScalarCodecs.Timestamptz)
+    }
+
+
+{-| Type for the Timestamptz\_comparison\_exp input object.
+-}
+type alias Timestamptz_comparison_exp =
+    { eq_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , gt_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , gte_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , in_ : OptionalArgument (List BackendAPI.ScalarCodecs.Timestamptz)
+    , is_null_ : OptionalArgument Bool
+    , lt_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , lte_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , neq_ : OptionalArgument BackendAPI.ScalarCodecs.Timestamptz
+    , nin_ : OptionalArgument (List BackendAPI.ScalarCodecs.Timestamptz)
+    }
+
+
+{-| Encode a Timestamptz\_comparison\_exp into a value that can be used as an argument.
+-}
+encodeTimestamptz_comparison_exp : Timestamptz_comparison_exp -> Value
+encodeTimestamptz_comparison_exp input____ =
+    Encode.maybeObject
+        [ ( "_eq", (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.optional input____.eq_ ), ( "_gt", (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.optional input____.gt_ ), ( "_gte", (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.optional input____.gte_ ), ( "_in", ((BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.list) |> Encode.optional input____.in_ ), ( "_is_null", Encode.bool |> Encode.optional input____.is_null_ ), ( "_lt", (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.optional input____.lt_ ), ( "_lte", (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.optional input____.lte_ ), ( "_neq", (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.optional input____.neq_ ), ( "_nin", ((BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapEncoder .codecTimestamptz) |> Encode.list) |> Encode.optional input____.nin_ ) ]
+
+
 buildTodo_aggregate_order_by :
     (Todo_aggregate_order_byOptionalFields -> Todo_aggregate_order_byOptionalFields)
     -> Todo_aggregate_order_by
@@ -229,17 +325,20 @@ buildTodo_bool_exp fillOptionals____ =
     let
         optionals____ =
             fillOptionals____
-                { and_ = Absent, not_ = Absent, or_ = Absent, id = Absent, name = Absent, user = Absent, user_id = Absent }
+                { and_ = Absent, not_ = Absent, or_ = Absent, completed = Absent, created_at = Absent, id = Absent, name = Absent, updated_at = Absent, user = Absent, user_id = Absent }
     in
-    Todo_bool_exp { and_ = optionals____.and_, not_ = optionals____.not_, or_ = optionals____.or_, id = optionals____.id, name = optionals____.name, user = optionals____.user, user_id = optionals____.user_id }
+    Todo_bool_exp { and_ = optionals____.and_, not_ = optionals____.not_, or_ = optionals____.or_, completed = optionals____.completed, created_at = optionals____.created_at, id = optionals____.id, name = optionals____.name, updated_at = optionals____.updated_at, user = optionals____.user, user_id = optionals____.user_id }
 
 
 type alias Todo_bool_expOptionalFields =
     { and_ : OptionalArgument (List Todo_bool_exp)
     , not_ : OptionalArgument Todo_bool_exp
     , or_ : OptionalArgument (List Todo_bool_exp)
+    , completed : OptionalArgument Boolean_comparison_exp
+    , created_at : OptionalArgument Timestamptz_comparison_exp
     , id : OptionalArgument Int_comparison_exp
     , name : OptionalArgument String_comparison_exp
+    , updated_at : OptionalArgument Timestamptz_comparison_exp
     , user : OptionalArgument User_bool_exp
     , user_id : OptionalArgument Int_comparison_exp
     }
@@ -254,8 +353,11 @@ type alias Todo_bool_expRaw =
     { and_ : OptionalArgument (List Todo_bool_exp)
     , not_ : OptionalArgument Todo_bool_exp
     , or_ : OptionalArgument (List Todo_bool_exp)
+    , completed : OptionalArgument Boolean_comparison_exp
+    , created_at : OptionalArgument Timestamptz_comparison_exp
     , id : OptionalArgument Int_comparison_exp
     , name : OptionalArgument String_comparison_exp
+    , updated_at : OptionalArgument Timestamptz_comparison_exp
     , user : OptionalArgument User_bool_exp
     , user_id : OptionalArgument Int_comparison_exp
     }
@@ -272,7 +374,7 @@ type Todo_bool_exp
 encodeTodo_bool_exp : Todo_bool_exp -> Value
 encodeTodo_bool_exp (Todo_bool_exp input____) =
     Encode.maybeObject
-        [ ( "_and", (encodeTodo_bool_exp |> Encode.list) |> Encode.optional input____.and_ ), ( "_not", encodeTodo_bool_exp |> Encode.optional input____.not_ ), ( "_or", (encodeTodo_bool_exp |> Encode.list) |> Encode.optional input____.or_ ), ( "id", encodeInt_comparison_exp |> Encode.optional input____.id ), ( "name", encodeString_comparison_exp |> Encode.optional input____.name ), ( "user", encodeUser_bool_exp |> Encode.optional input____.user ), ( "user_id", encodeInt_comparison_exp |> Encode.optional input____.user_id ) ]
+        [ ( "_and", (encodeTodo_bool_exp |> Encode.list) |> Encode.optional input____.and_ ), ( "_not", encodeTodo_bool_exp |> Encode.optional input____.not_ ), ( "_or", (encodeTodo_bool_exp |> Encode.list) |> Encode.optional input____.or_ ), ( "completed", encodeBoolean_comparison_exp |> Encode.optional input____.completed ), ( "created_at", encodeTimestamptz_comparison_exp |> Encode.optional input____.created_at ), ( "id", encodeInt_comparison_exp |> Encode.optional input____.id ), ( "name", encodeString_comparison_exp |> Encode.optional input____.name ), ( "updated_at", encodeTimestamptz_comparison_exp |> Encode.optional input____.updated_at ), ( "user", encodeUser_bool_exp |> Encode.optional input____.user ), ( "user_id", encodeInt_comparison_exp |> Encode.optional input____.user_id ) ]
 
 
 buildTodo_insert_input :
@@ -282,13 +384,14 @@ buildTodo_insert_input fillOptionals____ =
     let
         optionals____ =
             fillOptionals____
-                { id = Absent, name = Absent, user_id = Absent }
+                { completed = Absent, id = Absent, name = Absent, user_id = Absent }
     in
-    { id = optionals____.id, name = optionals____.name, user_id = optionals____.user_id }
+    { completed = optionals____.completed, id = optionals____.id, name = optionals____.name, user_id = optionals____.user_id }
 
 
 type alias Todo_insert_inputOptionalFields =
-    { id : OptionalArgument Int
+    { completed : OptionalArgument Bool
+    , id : OptionalArgument Int
     , name : OptionalArgument String
     , user_id : OptionalArgument Int
     }
@@ -297,7 +400,8 @@ type alias Todo_insert_inputOptionalFields =
 {-| Type for the Todo\_insert\_input input object.
 -}
 type alias Todo_insert_input =
-    { id : OptionalArgument Int
+    { completed : OptionalArgument Bool
+    , id : OptionalArgument Int
     , name : OptionalArgument String
     , user_id : OptionalArgument Int
     }
@@ -308,7 +412,7 @@ type alias Todo_insert_input =
 encodeTodo_insert_input : Todo_insert_input -> Value
 encodeTodo_insert_input input____ =
     Encode.maybeObject
-        [ ( "id", Encode.int |> Encode.optional input____.id ), ( "name", Encode.string |> Encode.optional input____.name ), ( "user_id", Encode.int |> Encode.optional input____.user_id ) ]
+        [ ( "completed", Encode.bool |> Encode.optional input____.completed ), ( "id", Encode.int |> Encode.optional input____.id ), ( "name", Encode.string |> Encode.optional input____.name ), ( "user_id", Encode.int |> Encode.optional input____.user_id ) ]
 
 
 buildTodo_max_order_by :
@@ -318,14 +422,16 @@ buildTodo_max_order_by fillOptionals____ =
     let
         optionals____ =
             fillOptionals____
-                { id = Absent, name = Absent, user_id = Absent }
+                { created_at = Absent, id = Absent, name = Absent, updated_at = Absent, user_id = Absent }
     in
-    { id = optionals____.id, name = optionals____.name, user_id = optionals____.user_id }
+    { created_at = optionals____.created_at, id = optionals____.id, name = optionals____.name, updated_at = optionals____.updated_at, user_id = optionals____.user_id }
 
 
 type alias Todo_max_order_byOptionalFields =
-    { id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    { created_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , name : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , updated_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , user_id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     }
 
@@ -333,8 +439,10 @@ type alias Todo_max_order_byOptionalFields =
 {-| Type for the Todo\_max\_order\_by input object.
 -}
 type alias Todo_max_order_by =
-    { id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    { created_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , name : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , updated_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , user_id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     }
 
@@ -344,7 +452,7 @@ type alias Todo_max_order_by =
 encodeTodo_max_order_by : Todo_max_order_by -> Value
 encodeTodo_max_order_by input____ =
     Encode.maybeObject
-        [ ( "id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.id ), ( "name", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.name ), ( "user_id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.user_id ) ]
+        [ ( "created_at", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.created_at ), ( "id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.id ), ( "name", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.name ), ( "updated_at", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.updated_at ), ( "user_id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.user_id ) ]
 
 
 buildTodo_min_order_by :
@@ -354,14 +462,16 @@ buildTodo_min_order_by fillOptionals____ =
     let
         optionals____ =
             fillOptionals____
-                { id = Absent, name = Absent, user_id = Absent }
+                { created_at = Absent, id = Absent, name = Absent, updated_at = Absent, user_id = Absent }
     in
-    { id = optionals____.id, name = optionals____.name, user_id = optionals____.user_id }
+    { created_at = optionals____.created_at, id = optionals____.id, name = optionals____.name, updated_at = optionals____.updated_at, user_id = optionals____.user_id }
 
 
 type alias Todo_min_order_byOptionalFields =
-    { id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    { created_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , name : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , updated_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , user_id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     }
 
@@ -369,8 +479,10 @@ type alias Todo_min_order_byOptionalFields =
 {-| Type for the Todo\_min\_order\_by input object.
 -}
 type alias Todo_min_order_by =
-    { id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    { created_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , name : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , updated_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , user_id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     }
 
@@ -380,7 +492,7 @@ type alias Todo_min_order_by =
 encodeTodo_min_order_by : Todo_min_order_by -> Value
 encodeTodo_min_order_by input____ =
     Encode.maybeObject
-        [ ( "id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.id ), ( "name", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.name ), ( "user_id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.user_id ) ]
+        [ ( "created_at", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.created_at ), ( "id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.id ), ( "name", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.name ), ( "updated_at", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.updated_at ), ( "user_id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.user_id ) ]
 
 
 buildTodo_on_conflict :
@@ -439,14 +551,17 @@ buildTodo_order_by fillOptionals____ =
     let
         optionals____ =
             fillOptionals____
-                { id = Absent, name = Absent, user = Absent, user_id = Absent }
+                { completed = Absent, created_at = Absent, id = Absent, name = Absent, updated_at = Absent, user = Absent, user_id = Absent }
     in
-    { id = optionals____.id, name = optionals____.name, user = optionals____.user, user_id = optionals____.user_id }
+    { completed = optionals____.completed, created_at = optionals____.created_at, id = optionals____.id, name = optionals____.name, updated_at = optionals____.updated_at, user = optionals____.user, user_id = optionals____.user_id }
 
 
 type alias Todo_order_byOptionalFields =
-    { id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    { completed : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , created_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , name : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , updated_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , user : OptionalArgument User_order_by
     , user_id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     }
@@ -455,8 +570,11 @@ type alias Todo_order_byOptionalFields =
 {-| Type for the Todo\_order\_by input object.
 -}
 type alias Todo_order_by =
-    { id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    { completed : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , created_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , name : OptionalArgument BackendAPI.Enum.Order_by.Order_by
+    , updated_at : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     , user : OptionalArgument User_order_by
     , user_id : OptionalArgument BackendAPI.Enum.Order_by.Order_by
     }
@@ -467,7 +585,7 @@ type alias Todo_order_by =
 encodeTodo_order_by : Todo_order_by -> Value
 encodeTodo_order_by input____ =
     Encode.maybeObject
-        [ ( "id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.id ), ( "name", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.name ), ( "user", encodeUser_order_by |> Encode.optional input____.user ), ( "user_id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.user_id ) ]
+        [ ( "completed", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.completed ), ( "created_at", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.created_at ), ( "id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.id ), ( "name", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.name ), ( "updated_at", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.updated_at ), ( "user", encodeUser_order_by |> Encode.optional input____.user ), ( "user_id", Encode.enum BackendAPI.Enum.Order_by.toString |> Encode.optional input____.user_id ) ]
 
 
 buildTodo_pk_columns_input :
@@ -502,19 +620,23 @@ buildTodo_set_input fillOptionals____ =
     let
         optionals____ =
             fillOptionals____
-                { name = Absent }
+                { completed = Absent, name = Absent }
     in
-    { name = optionals____.name }
+    { completed = optionals____.completed, name = optionals____.name }
 
 
 type alias Todo_set_inputOptionalFields =
-    { name : OptionalArgument String }
+    { completed : OptionalArgument Bool
+    , name : OptionalArgument String
+    }
 
 
 {-| Type for the Todo\_set\_input input object.
 -}
 type alias Todo_set_input =
-    { name : OptionalArgument String }
+    { completed : OptionalArgument Bool
+    , name : OptionalArgument String
+    }
 
 
 {-| Encode a Todo\_set\_input into a value that can be used as an argument.
@@ -522,7 +644,7 @@ type alias Todo_set_input =
 encodeTodo_set_input : Todo_set_input -> Value
 encodeTodo_set_input input____ =
     Encode.maybeObject
-        [ ( "name", Encode.string |> Encode.optional input____.name ) ]
+        [ ( "completed", Encode.bool |> Encode.optional input____.completed ), ( "name", Encode.string |> Encode.optional input____.name ) ]
 
 
 buildTodo_stddev_order_by :

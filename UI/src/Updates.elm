@@ -7,6 +7,7 @@ import Api exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import Helpers exposing (..)
+import Html exposing (i)
 import Ports
 import RemoteData exposing (..)
 import Routes exposing (Route(..), routeParser)
@@ -329,3 +330,45 @@ update msg model =
                             todo_list
             in
             ( { model | user_todos = Success new_todo_list }, Cmd.none )
+
+        UpdateTodoAction todo_id current_completed_value ->
+            ( model
+            , case model.token of
+                Just token ->
+                    update_todo_completion token todo_id (not current_completed_value)
+
+                Nothing ->
+                    Cmd.none
+            )
+
+        TodoDataUpdateResult resp ->
+            let
+                _ =
+                    Debug.log "todo update resp" resp
+
+                new_model =
+                    case resp of
+                        Success maybe_todo_updated ->
+                            case maybe_todo_updated of
+                                Just todo ->
+                                    case model.user_todos of
+                                        Success todos ->
+                                            let
+                                                filter_updated_todo =
+                                                    List.filter (\t -> not <| t.id == todo.id) todos
+
+                                                updated_todos =
+                                                    List.append filter_updated_todo [ todo ]
+                                            in
+                                            { model | user_todos = Success updated_todos }
+
+                                        _ ->
+                                            model
+
+                                Nothing ->
+                                    model
+
+                        _ ->
+                            model
+            in
+            ( new_model, Cmd.none )

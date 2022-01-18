@@ -9,20 +9,26 @@ import Json.Decode as Decode exposing (Decoder)
 
 {-| select columns of table "todo"
 
+  - Completed - column name
+  - Created\_at - column name
   - Id - column name
   - Name - column name
+  - Updated\_at - column name
   - User\_id - column name
 
 -}
 type Todo_select_column
-    = Id
+    = Completed
+    | Created_at
+    | Id
     | Name
+    | Updated_at
     | User_id
 
 
 list : List Todo_select_column
 list =
-    [ Id, Name, User_id ]
+    [ Completed, Created_at, Id, Name, Updated_at, User_id ]
 
 
 decoder : Decoder Todo_select_column
@@ -31,11 +37,20 @@ decoder =
         |> Decode.andThen
             (\string ->
                 case string of
+                    "completed" ->
+                        Decode.succeed Completed
+
+                    "created_at" ->
+                        Decode.succeed Created_at
+
                     "id" ->
                         Decode.succeed Id
 
                     "name" ->
                         Decode.succeed Name
+
+                    "updated_at" ->
+                        Decode.succeed Updated_at
 
                     "user_id" ->
                         Decode.succeed User_id
@@ -50,11 +65,20 @@ decoder =
 toString : Todo_select_column -> String
 toString enum____ =
     case enum____ of
+        Completed ->
+            "completed"
+
+        Created_at ->
+            "created_at"
+
         Id ->
             "id"
 
         Name ->
             "name"
+
+        Updated_at ->
+            "updated_at"
 
         User_id ->
             "user_id"
@@ -74,11 +98,20 @@ This can be useful for generating Strings to use for <select> menus to check whi
 fromString : String -> Maybe Todo_select_column
 fromString enumString____ =
     case enumString____ of
+        "completed" ->
+            Just Completed
+
+        "created_at" ->
+            Just Created_at
+
         "id" ->
             Just Id
 
         "name" ->
             Just Name
+
+        "updated_at" ->
+            Just Updated_at
 
         "user_id" ->
             Just User_id

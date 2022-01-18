@@ -19,6 +19,16 @@ import Graphql.SelectionSet exposing (SelectionSet)
 import Json.Decode as Decode
 
 
+completed : SelectionSet Bool BackendAPI.Object.Todo
+completed =
+    Object.selectionForField "Bool" "completed" [] Decode.bool
+
+
+created_at : SelectionSet (Maybe BackendAPI.ScalarCodecs.Timestamptz) BackendAPI.Object.Todo
+created_at =
+    Object.selectionForField "(Maybe ScalarCodecs.Timestamptz)" "created_at" [] (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapCodecs |> .codecTimestamptz |> .decoder |> Decode.nullable)
+
+
 id : SelectionSet Int BackendAPI.Object.Todo
 id =
     Object.selectionForField "Int" "id" [] Decode.int
@@ -27,6 +37,11 @@ id =
 name : SelectionSet String BackendAPI.Object.Todo
 name =
     Object.selectionForField "String" "name" [] Decode.string
+
+
+updated_at : SelectionSet (Maybe BackendAPI.ScalarCodecs.Timestamptz) BackendAPI.Object.Todo
+updated_at =
+    Object.selectionForField "(Maybe ScalarCodecs.Timestamptz)" "updated_at" [] (BackendAPI.ScalarCodecs.codecs |> BackendAPI.Scalar.unwrapCodecs |> .codecTimestamptz |> .decoder |> Decode.nullable)
 
 
 {-| An object relationship

@@ -228,7 +228,7 @@ get_user_data_request token =
 
 todo_data_selection : SelectionSet TodoData BackendAPI.Object.Todo
 todo_data_selection =
-    SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
+    SelectionSet.map3 TodoData BAPIObjTodo.id BAPIObjTodo.name BAPIObjTodo.completed
 
 
 todo_data_query : SelectionSet (List TodoData) RootQuery
@@ -259,12 +259,12 @@ get_todo_data_request token =
 
 create_todo_data_selection : SelectionSet TodoData BackendAPI.Object.Todo
 create_todo_data_selection =
-    SelectionSet.map2 TodoData BAPIObjTodo.id BAPIObjTodo.name
+    SelectionSet.map3 TodoData BAPIObjTodo.id BAPIObjTodo.name BAPIObjTodo.completed
 
 
 todo_required_args : CreateTodo -> UserData -> InsertTodoOneRequiredArguments
 todo_required_args todo user =
-    { object = { id = Absent, name = Present todo.name, user_id = Present user.id } }
+    { object = { id = Absent, name = Present todo.name, user_id = Present user.id, completed = Absent } }
 
 
 todo_create_mutation : CreateTodo -> UserData -> SelectionSet (Maybe TodoData) RootMutation
@@ -302,3 +302,40 @@ delete_user_todo token todo_id =
         |> Graphql.Http.mutationRequest graphql_url
         |> generate_authorization_header token
         |> Graphql.Http.send (RemoteData.fromResult >> TodoDataDeletionResult)
+
+
+
+-- update todo
+{-
+   mutation MyMutation {
+     update_todo_by_pk(pk_columns: {id: 106}, _set: {completed: true}) {
+       completed
+       created_at
+       id
+       name
+       updated_at
+     }
+   }
+-}
+
+
+update_to_completed_optional_args : Bool -> BAPIMutation.UpdateTodoByPkOptionalArguments -> BAPIMutation.UpdateTodoByPkOptionalArguments
+update_to_completed_optional_args current_completed_value _ =
+    -- second value is args
+    { set_ = Present { completed = Present current_completed_value, name = Absent } }
+
+
+todo_update_mutation : TodoId -> Bool -> SelectionSet (Maybe TodoData) RootMutation
+todo_update_mutation todo_id current_completed_value =
+    BAPIMutation.update_todo_by_pk
+        (update_to_completed_optional_args current_completed_value)
+        { pk_columns = { id = todo_id } }
+        create_todo_data_selection
+
+
+update_todo_completion : LoginResponse -> TodoId -> Bool -> Cmd Msg
+update_todo_completion token todo_id current_completed_value =
+    todo_update_mutation todo_id current_completed_value
+        |> Graphql.Http.mutationRequest graphql_url
+        |> generate_authorization_header token
+        |> Graphql.Http.send (RemoteData.fromResult >> TodoDataUpdateResult)
