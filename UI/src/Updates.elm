@@ -222,10 +222,6 @@ update msg model =
                 Success users ->
                     case List.head users of
                         Just user ->
-                            let
-                                _ =
-                                    Debug.log "user" user
-                            in
                             ( { model | user = Just user }
                             , case model.token of
                                 Just token ->
@@ -242,10 +238,6 @@ update msg model =
                     ( { model | token = Nothing }, Cmd.none )
 
         GetTodoDataResult resp ->
-            let
-                _ =
-                    Debug.log "todo resp" resp
-            in
             ( { model | user_todos = resp }, Cmd.none )
 
         GetTodoDataCreationResult resp ->
@@ -273,9 +265,6 @@ update msg model =
 
                         _ ->
                             user_todos
-
-                _ =
-                    Debug.log "todo creation" resp
             in
             ( { model | user_todos = Success new_user_todos, create_todo = clear_create_form }, Cmd.none )
 
@@ -290,10 +279,6 @@ update msg model =
             ( { model | create_todo = new_ct }, Cmd.none )
 
         DeleteTodo todo_id ->
-            let
-                _ =
-                    Debug.log "deleting" todo_id
-            in
             ( model
             , case model.token of
                 Just token ->
@@ -305,9 +290,6 @@ update msg model =
 
         TodoDataDeletionResult resp ->
             let
-                _ =
-                    Debug.log "result" resp
-
                 todo_list =
                     case model.user_todos of
                         Success todos ->
@@ -343,9 +325,6 @@ update msg model =
 
         TodoDataUpdateResult resp ->
             let
-                _ =
-                    Debug.log "todo update resp" resp
-
                 new_model =
                     case resp of
                         Success maybe_todo_updated ->
