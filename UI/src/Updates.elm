@@ -118,14 +118,11 @@ update msg model =
             if model.user_model.create_todo.name == "" then (model, Cmd.none)
             else 
                 ( model
-                , case model.token of
-                    Just token ->
-                        Maybe.map 
-                            (\user -> makeTodoRequest token model.user_model.create_todo user) model.user_model.user_data
-                        |> Maybe.withDefault Cmd.none
-
-                    Nothing ->
-                        Cmd.none
+                , Maybe.map2
+                    (makeTodoRequest model.user_model.create_todo) 
+                    model.token 
+                    model.user_model.user_data
+                    |> Maybe.withDefault Cmd.none
                 )
 
         LoginResponseAction resp ->

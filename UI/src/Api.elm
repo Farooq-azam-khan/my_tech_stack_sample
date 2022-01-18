@@ -272,8 +272,8 @@ todo_create_mutation todo user =
     BAPIMutation.insert_todo_one identity (todo_required_args todo user) create_todo_data_selection
 
 
-makeTodoRequest : Token -> CreateTodo -> UserData -> Cmd Msg
-makeTodoRequest token todo user =
+makeTodoRequest : CreateTodo -> Token -> UserData -> Cmd Msg
+makeTodoRequest todo token user =
     let
         todo_mutation_query =
             todo_create_mutation todo user

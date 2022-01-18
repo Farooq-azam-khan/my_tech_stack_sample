@@ -55,13 +55,8 @@ init flags url key =
 
         cmds =
             Cmd.batch
-                [ case model.token of
-                    Just token ->
-                        get_user_data_request token
-
-                    -- get user data
-                    Nothing ->
-                        Cmd.none
+                [  Maybe.map (\token -> get_user_data_request token) model.token
+                    |> Maybe.withDefault Cmd.none
                 ]
     in
     ( model

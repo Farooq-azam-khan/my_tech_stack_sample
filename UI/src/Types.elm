@@ -7,33 +7,9 @@ import Routes exposing (Route)
 import Url
 
 
-
--- type alias Token =
---     { access_token : String
---     , token_type : String
---     }
-
-
 type alias Email =
     String
 
-
-
--- type alias LoginForm =
---     { name : String
---     , password : String
---     , email : Email
---     }
--- init_login_form : LoginForm
--- init_login_form =
---     { name = ""
---     , password = ""
---     , email = ""
---     }
-
-
--- type alias Token =
---     String
 
 
 type alias Username =
@@ -60,13 +36,6 @@ init_register_form =
     , email = ""
     }
 
-
-
--- type alias User =
---     { name : String
---     , email : String
---     , token : Token
---     }
 
 
 type alias Todo =
@@ -135,10 +104,7 @@ type alias Model =
     , url : Url.Url
     , token : MaybeToken
     , user_model : UserModel 
-    -- , user : Maybe UserData
-    -- , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , route : Maybe Route
-    -- , create_todo : CreateTodo
     , signup_user : SignupUserForm
     , login_user : LoginFormData
     }
