@@ -40,7 +40,7 @@ navbar_component model route =
                 [ class "p-4 flex flex-row items-center justify-between"
                 ]
                 [ a
-                    [ href "#"
+                    [ href "/"
                     , class "text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline"
                     ]
                     [ text "TECH UI" ]
@@ -51,7 +51,7 @@ navbar_component model route =
                     ]
                 ]
             , nav
-                [ class "flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
+                [ class "flex-col space-x-3 flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
                 ]
                 (case model.token of
                     Just _ ->
@@ -128,14 +128,15 @@ login_compnent login_form =
             , p [ class "text-red text-xs italic" ]
                 [ text "Please choose a password." ]
             ]
-        , div [ class "flex items-center justify-between" ]
+        , div [ class "flex flex-col md:block space-y-2" ]
             [ button
-                [ class "bg-black text-white px-3 py-2 rounded-md"
+                [ class "bg-indigo-600 hover:bg-indigo-800 text-white px-3 py-2 rounded-md"
                 , type_ "button"
                 , onClick LoginFormAction
                 ]
                 [ text "Sign In"
                 ]
+            , div [] [ a [ href "/signup", class "text-indigo-600 hover:text-indigo-800" ] [ text "Not logged in, Sign Up" ] ]
 
             -- , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]
             --     [ text "Forgot Password?" ]
@@ -193,7 +194,7 @@ register_compnent register_form =
         --     ]
         , div [ class "flex items-center justify-between" ]
             [ button
-                [ class "bg-black text-white px-3 py-2 rounded-md"
+                [ class "bg-indigo-600 hover:bg-indigo-800 text-white px-3 py-2 rounded-md"
                 , type_ "button"
                 , onClick <| RegisterUserAction register_form.username register_form.password
                 ]
@@ -227,7 +228,7 @@ logged_in_card =
                 [ class "p-5"
                 ]
                 [ a
-                    [ href "#"
+                    [ href "/login"
                     ]
                     [ h5
                         [ class "text-gray-900 font-bold text-2xl tracking-tight mb-2"
