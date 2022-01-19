@@ -47,6 +47,19 @@ viewPage model =
                                 Nothing ->
                                     div [] [ login_compnent <| model.login_user ]
 
+                        LogoutR ->
+                            div
+                                [ class "fixed inset-0 flex items-center justify-center" ]
+                                [ div [ class "space-y-3" ]
+                                    [ p
+                                        []
+                                        [ text "You have successfully logged out." ]
+                                    , a
+                                        [ href "/", class "hover:text-indigo-900 text-indigo-600 hover:bg-indigo-200 block font-semibold bg-indigo-100 text-center rounded-md px-2 py-3" ]
+                                        [ text "Go home" ]
+                                    ]
+                                ]
+
                         RegisterR ->
                             case model.token of
                                 Just _ ->
@@ -57,9 +70,6 @@ viewPage model =
 
                         ErrorR ->
                             div [] [ text <| "error occured trying to get to route: " ++ Url.toString model.url ]
-
-                        _ ->
-                            div [] []
                     ]
 
             Nothing ->

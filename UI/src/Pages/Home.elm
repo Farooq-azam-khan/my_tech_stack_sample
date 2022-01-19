@@ -49,7 +49,11 @@ home_page model filter_todo =
                     ]
 
             Nothing ->
-                not_logged_in_card
+                div
+                    [ class "mt-60 flex items-center justify-between"
+                    ]
+                    [ not_logged_in_card
+                    ]
         ]
 
 
@@ -194,7 +198,7 @@ not_logged_in_card =
                 [ class "p-5"
                 ]
                 [ a
-                    [ href "#"
+                    [ href "/login"
                     ]
                     [ h5
                         [ class "text-gray-900 font-bold text-2xl tracking-tight mb-2"
@@ -204,7 +208,11 @@ not_logged_in_card =
                 , p
                     [ class "font-normal text-gray-700 mb-3"
                     ]
-                    [ text "This is a todo app. Sign up, login, make a todo. Do the todo and mark it done."
+                    [ text "This is a todo app. "
+                    , a [ class "text-indigo-900", href "/signup" ] [ text "Sign up" ]
+                    , text " or "
+                    , a [ class "text-indigo-900", href "/login" ] [ text "Log In" ]
+                    , text " to make a todo. Next, do the todo and mark it done."
                     ]
                 ]
             ]
