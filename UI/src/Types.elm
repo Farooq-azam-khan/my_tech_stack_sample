@@ -11,13 +11,18 @@ type alias Email =
     String
 
 
-
 type alias Username =
     String
 
 
 type alias Password =
     String
+
+
+type FilterTodoType
+    = All
+    | Active
+    | Completed
 
 
 type alias RegisterForm =
@@ -35,7 +40,6 @@ init_register_form =
     , confirm_password = ""
     , email = ""
     }
-
 
 
 type alias Todo =
@@ -58,7 +62,8 @@ type alias MaybeSignupResponse =
     Maybe SignupResponse
 
 
-type alias Token = { token:String } 
+type alias Token =
+    { token : String }
 
 
 type alias MaybeToken =
@@ -93,17 +98,19 @@ type alias Flag =
 type alias CreateTodo =
     { name : String }
 
-type alias UserModel = 
+
+type alias UserModel =
     { user_data : Maybe UserData
     , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , create_todo : CreateTodo
     }
 
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , token : MaybeToken
-    , user_model : UserModel 
+    , user_model : UserModel
     , route : Maybe Route
     , signup_user : SignupUserForm
     , login_user : LoginFormData

@@ -8,8 +8,8 @@ import RemoteData exposing (..)
 import Types exposing (..)
 
 
-home_page : Model -> Html Msg
-home_page model =
+home_page : Model -> FilterTodoType -> Html Msg
+home_page model filter_todo =
     div
         [ class "max-w-2xl mx-auto" ]
         [ case model.token of
@@ -39,22 +39,10 @@ home_page model =
                     , case model.user_model.user_todos of
                         Success todos ->
                             if List.length todos == 0 then
-                                div [ class "flex items-center justify-center bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full" ]
-                                    [ h2
-                                        [ class "text-center font-semibold text-gray-700 text-xl" ]
-                                        [ text "You do not have any todos. Make some." ]
-                                    ]
+                                no_todos_component
 
                             else
-                                div [ class "bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full" ]
-                                    [ h1
-                                        [ class "text-3xl font-bold" ]
-                                        [ text "Here are you TODOS"
-                                        ]
-                                    , ol
-                                        [ class "my-10 space-y-10" ]
-                                        (List.map todo_component todos)
-                                    ]
+                                todo_list_component todos filter_todo
 
                         _ ->
                             div [] [ p [] [ text "no todos" ] ]
@@ -62,6 +50,99 @@ home_page model =
 
             Nothing ->
                 not_logged_in_card
+        ]
+
+
+todo_list_component : List TodoData -> FilterTodoType -> Html Msg
+todo_list_component todos filter_todo =
+    div
+        [ class "bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full" ]
+        [ h1
+            [ class "text-3xl font-bold" ]
+            [ text "Here are you TODOS"
+            ]
+        , ol
+            [ class "my-10 space-y-10" ]
+            (case filter_todo of
+                All ->
+                    List.map todo_component todos
+
+                Active ->
+                    List.filter (\todo -> not todo.completed) todos |> List.map todo_component
+
+                Completed ->
+                    List.filter (\todo -> todo.completed) todos |> List.map todo_component
+            )
+        , todo_stas_componet todos filter_todo
+        ]
+
+
+get_not_completed_todos : List TodoData -> Int
+get_not_completed_todos todos =
+    List.filter (\todo -> not todo.completed) todos |> List.length
+
+
+get_completed_todos : List TodoData -> Int
+get_completed_todos todos =
+    List.filter (\todo -> todo.completed) todos |> List.length
+
+
+todo_stas_componet : List TodoData -> FilterTodoType -> Html Msg
+todo_stas_componet todos filter_todo =
+    let
+        active_styles =
+            "px-2 py-1 rounded-sm bg-white"
+
+        inactive_styles =
+            "px-2 py-1"
+    in
+    div
+        [ class "flex items-center justify-between"
+        ]
+        [ div
+            [ class "text-gray-600" ]
+            [ text <| (get_not_completed_todos todos |> String.fromInt) ++ " items left" ]
+        , div
+            [ class "flex items-center justify-between space-x-5 text-gray-600" ]
+            (case filter_todo of
+                All ->
+                    [ a
+                        [ class active_styles, href "/all" ]
+                        [ text "All" ]
+                    , a [ class inactive_styles, href "/active" ] [ text "Active" ]
+                    , a [ class inactive_styles, href "/completed" ] [ text "Completed" ]
+                    ]
+
+                Active ->
+                    [ a
+                        [ class inactive_styles, href "/all" ]
+                        [ text "All" ]
+                    , a [ class active_styles, href "/active" ] [ text "Active" ]
+                    , a [ class inactive_styles, href "/completed" ] [ text "Completed" ]
+                    ]
+
+                Completed ->
+                    [ a
+                        [ class inactive_styles, href "/all" ]
+                        [ text "All" ]
+                    , a [ class inactive_styles, href "/active" ] [ text "Active" ]
+                    , a [ class active_styles, href "/completed" ] [ text "Completed" ]
+                    ]
+            )
+        , div
+            [ class "text-gray-600" ]
+            [ text <| "Clear Completed " ++ "(" ++ (get_completed_todos todos |> String.fromInt) ++ ")" ]
+        ]
+
+
+no_todos_component : Html Msg
+no_todos_component =
+    div
+        [ class "flex items-center justify-center bg-gray-100 py-5 px-10 shadow-xl rounded-md w-full h-full"
+        ]
+        [ h2
+            [ class "text-center font-semibold text-gray-700 text-xl" ]
+            [ text "You do not have any todos. Make some." ]
         ]
 
 

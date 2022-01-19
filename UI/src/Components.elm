@@ -145,9 +145,10 @@ login_compnent login_form =
 
 register_compnent : Types.SignupUserForm -> Html Msg
 register_compnent register_form =
-    Html.form
+    Html.div
         [ class "max-w-xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col"
-        , onSubmit (RegisterUserAction register_form.username register_form.password)
+
+        -- , onSubmit (RegisterUserAction register_form.username register_form.password)
         ]
         [ div
             [ class "mb-4" ]
@@ -191,7 +192,11 @@ register_compnent register_form =
         --         [ text "Please confirm your password." ]
         --     ]
         , div [ class "flex items-center justify-between" ]
-            [ button [ class "bg-black text-white px-3 py-2 rounded-md", type_ "submit" ]
+            [ button
+                [ class "bg-black text-white px-3 py-2 rounded-md"
+                , type_ "button"
+                , onClick <| RegisterUserAction register_form.username register_form.password
+                ]
                 [ text "Sign Up" ]
 
             -- , a [ class "inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker", href "#" ]

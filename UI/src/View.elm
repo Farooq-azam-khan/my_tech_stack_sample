@@ -25,7 +25,13 @@ viewPage model =
                         HomeR ->
                             div
                                 [ class "container" ]
-                                [ home_page model ]
+                                [ home_page model All ]
+
+                        ActiveR ->
+                            div [ class "container" ] [ home_page model Active ]
+
+                        CompletedR ->
+                            div [ class "container" ] [ home_page model Completed ]
 
                         TodoR todo_id ->
                             div [] [ text <| "todo: " ++ String.fromInt todo_id ]
@@ -51,7 +57,9 @@ viewPage model =
 
                         ErrorR ->
                             div [] [ text <| "error occured trying to get to route: " ++ Url.toString model.url ]
-                        _ -> div [] []
+
+                        _ ->
+                            div [] []
                     ]
 
             Nothing ->

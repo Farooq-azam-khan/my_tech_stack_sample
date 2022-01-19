@@ -6,6 +6,8 @@ import Url.Parser exposing ((</>), Parser, int, map, oneOf, s, string, top)
 type Route
     = TodoR Int
     | HomeR
+    | ActiveR
+    | CompletedR
     | UserR String
     | LoginR
     | RegisterR
@@ -18,6 +20,9 @@ routeParser =
     oneOf
         [ map HomeR top
         , map HomeR (s "home")
+        , map HomeR (s "all")
+        , map ActiveR (s "active")
+        , map CompletedR (s "completed")
         , map LoginR (s "login")
         , map LoginR (s "sign-in")
         , map LoginR (s "signin")
