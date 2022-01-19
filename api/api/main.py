@@ -107,3 +107,8 @@ def handle_jwt_login(login_request: LoginUserInput):
         return "invalid password"
     except Exception as e:
         return str(e)
+
+
+@app.get("/hello-world")
+def index():
+    return {"hello": "world"}
