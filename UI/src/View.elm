@@ -19,7 +19,7 @@ viewPage model =
     main_ []
         [ case model.route of
             Just route ->
-                div []
+                div [ class "relative" ]
                     [ navbar_component model route
                     , case route of
                         HomeR ->
@@ -49,7 +49,7 @@ viewPage model =
 
                         LogoutR ->
                             div
-                                [ class "fixed inset-0 flex items-center justify-center" ]
+                                [ class "aboslute inset-0 flex items-center justify-center" ]
                                 [ div [ class "space-y-3" ]
                                     [ p
                                         []
