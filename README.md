@@ -99,6 +99,7 @@ graphql-engine:
 9. start up the hasura console: `cd hasura`, `hasura console`
 - any migration level changes will automatically be applied
 - any metdata level changes (like permission, action, events, etc.) will need to be added by you
+10. write a `.env` file in the root of the dir with the env variables from `sample.env`
 ## Workflow 
 apply metadata: `hasura metadata apply` 
 
