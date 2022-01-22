@@ -29,10 +29,6 @@ type alias User =
     { username : String }
 
 
-type alias Flags =
-    {}
-
-
 fromElm : Encoder FromElm
 fromElm =
     TsEncode.union
@@ -58,6 +54,14 @@ toElm =
         ]
 
 
-flags : Decoder Flags
+type alias Flags =
+    String
+
+
+
+-- flags : Decoder Flags
+
+
+flags : TsDecode.Decoder Flags
 flags =
-    TsDecode.bool
+    TsDecode.string

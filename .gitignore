@@ -1,7 +1,9 @@
 # My ignores 
 build.css
 elm.js 
+# elm ts interop file codegen
 *.d.ts
+
 
 # elm ignores
 elm-stuff

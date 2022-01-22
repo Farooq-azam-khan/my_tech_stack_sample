@@ -91,8 +91,9 @@ type alias TodoData =
     }
 
 
-type alias Flag =
-    { token : MaybeToken }
+
+-- type alias Flag =
+--     { token : MaybeToken }
 
 
 type alias CreateTodo =

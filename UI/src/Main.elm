@@ -7,6 +7,9 @@ import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import InteropDefinitions
+import InteropPorts
+import Json.Decode
 import RemoteData exposing (RemoteData(..))
 import Routes exposing (Route(..), routeParser)
 import Types exposing (..)
@@ -16,7 +19,7 @@ import Url.Parser exposing (parse)
 import View exposing (viewPage)
 
 
-main : Program Flag Model Msg
+main : Program Json.Decode.Value Model Msg
 main =
     Browser.application
         { init = init
@@ -37,17 +40,30 @@ subs _ =
 -- INIT
 
 
-init : Flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init : Json.Decode.Value -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
         _ =
-            Debug.log "Your OS is" "???"
+            case InteropPorts.decodeFlags flags of
+                Err error ->
+                    let
+                        _ =
+                            Debug.log "error parsing flags" error
+                    in
+                    ""
+
+                Ok flgs ->
+                    let
+                        _ =
+                            Debug.log "flags parsed" flgs
+                    in
+                    ""
 
         model =
             { url = url
             , key = key
             , route = parse routeParser url
-            , token = flags.token
+            , token = Nothing -- flags.token
             , user_model =
                 { user_data = Nothing
                 , user_todos = NotAsked
