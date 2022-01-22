@@ -40,22 +40,26 @@ subs _ =
 init : Flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
+        _ =
+            Debug.log "Your OS is" "???"
+
         model =
             { url = url
             , key = key
             , route = parse routeParser url
             , token = flags.token
-            , user_model =  { user_data = Nothing
-                            , user_todos = NotAsked
-                            , create_todo = {name = ""}
-                            }
+            , user_model =
+                { user_data = Nothing
+                , user_todos = NotAsked
+                , create_todo = { name = "" }
+                }
             , signup_user = SignupUserForm "" ""
             , login_user = LoginFormData "" ""
             }
 
         cmds =
             Cmd.batch
-                [  Maybe.map (\token -> get_user_data_request token) model.token
+                [ Maybe.map (\token -> get_user_data_request token) model.token
                     |> Maybe.withDefault Cmd.none
                 ]
     in

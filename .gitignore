@@ -1,6 +1,7 @@
 # My ignores 
 build.css
 elm.js 
+*.d.ts
 
 # elm ignores
 elm-stuff
