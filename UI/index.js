@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // Get token from local storage
     const token_str = sessionStorage.getItem(`${APP_NAME}_token`);
-    // const token_json = token_str ? JSON.parse(token_str) : null;
+    const token_json = token_str ? JSON.parse(token_str) : null;
     const app = Elm.Main.init({
         // @ts-ignore
         node: node,
         // @ts-ignore
-        flags: { os: getOsName(), token: { token: token_str } } // { 'token': token_json }
+        flags: { os: getOsName(), token: token_json } // { 'token': token_json }
     })
     // app.ports.interopFromElm
 
