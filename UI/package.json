@@ -18,7 +18,8 @@
     "api:admin": "elm-graphql http://localhost:8080/v1/graphql --base BackendAdminAPI --header 'X-Hasura-Admin-Secret: myadminsecretkey'",
     "api:dummy_user": "elm-graphql http://localhost:8080/v1/graphql --base BackendAPI --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWFsbG93ZWQtcm9sZXMiOlsidXNlciJdLCJ4LWhhc3VyYS1kZWZhdWx0LXJvbGUiOiJ1c2VyIiwieC1oYXN1cmEtdXNlci1pZCI6IjEifX0.9cKzVkGCr8lwWymThDgo2uavjjD45qfvq98v-ALZ6GA'",
     "api:anon": "elm-graphql http://localhost:8080/v1/graphql --base AnonAPI",
-    "elm:ts:init": "elm-ts-interop init"
+    "elm:ts:init": "elm-ts-interop init",
+    "elm:ts:generate_types": "npx elm-ts-interop --output src/index.d.ts"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +31,8 @@
     "elm-format": "^0.8.5",
     "elm-live": "^4.0.2",
     "elm-ts-interop": "^0.0.8",
-    "tailwindcss": "^3.0.7"
+    "tailwindcss": "^3.0.7",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.3.4"
