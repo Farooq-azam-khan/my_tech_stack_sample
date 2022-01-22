@@ -7,7 +7,6 @@ import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import InteropDefinitions
 import InteropPorts
 import Json.Decode
 import RemoteData exposing (RemoteData(..))
@@ -43,35 +42,39 @@ subs _ =
 init : Json.Decode.Value -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
-        _ =
+        model =
             case InteropPorts.decodeFlags flags of
                 Err error ->
                     let
                         _ =
                             Debug.log "error parsing flags" error
                     in
-                    ""
+                    { url = url
+                    , key = key
+                    , route = parse routeParser url
+                    , token = Nothing
+                    , user_model =
+                        { user_data = Nothing
+                        , user_todos = NotAsked
+                        , create_todo = { name = "" }
+                        }
+                    , signup_user = SignupUserForm "" ""
+                    , login_user = LoginFormData "" ""
+                    }
 
                 Ok flgs ->
-                    let
-                        _ =
-                            Debug.log "flags parsed" flgs
-                    in
-                    ""
-
-        model =
-            { url = url
-            , key = key
-            , route = parse routeParser url
-            , token = Nothing -- flags.token
-            , user_model =
-                { user_data = Nothing
-                , user_todos = NotAsked
-                , create_todo = { name = "" }
-                }
-            , signup_user = SignupUserForm "" ""
-            , login_user = LoginFormData "" ""
-            }
+                    { url = url
+                    , key = key
+                    , route = parse routeParser url
+                    , token = flgs.token
+                    , user_model =
+                        { user_data = Nothing
+                        , user_todos = NotAsked
+                        , create_todo = { name = "" }
+                        }
+                    , signup_user = SignupUserForm "" ""
+                    , login_user = LoginFormData "" ""
+                    }
 
         cmds =
             Cmd.batch

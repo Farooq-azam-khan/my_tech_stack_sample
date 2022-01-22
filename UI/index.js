@@ -8,18 +8,20 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Elm node not found")
     }
     // Get token from local storage
-    // const token_str = sessionStorage.getItem(`${APP_NAME}_token`) || "";
-    // const token_json = JSON.parse(token_str)
+    const token_str = sessionStorage.getItem(`${APP_NAME}_token`) || "";
+    const token_json = JSON.parse(token_str)
     const app = Elm.Main.init({
         node: node,
-        flags: "asdfasdf" // { 'token': token_json }
+        flags: { os: getOsName(), token: token_json } // { 'token': token_json }
     })
     // app.ports.interopFromElm
 
+    // @ts-ignore
     app.ports.storeTokenData.subscribe(token => {
         sessionStorage.setItem(`${APP_NAME}_token`, JSON.stringify(token));
     })
 
+    // @ts-ignore
     app.ports.logoutUser.subscribe(() => {
         console.log("Logging out user")
         sessionStorage.removeItem(`${APP_NAME}_token`);
@@ -27,13 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-function getOsName() {
+function getOsName() { // Windows" | "MacOs" | "Linux
     if (window.navigator.userAgent.includes("Windows")) {
         return "Windows"
     } else if (window.navigator.userAgent.includes("Mac")) {
-        return "Mac"
+        return "MacOs"
     } else if (window.navigator.userAgent.includes("Linux")) {
         return "Linux"
     }
-    return "";
+    return "Mobile/Unknown";
 }
