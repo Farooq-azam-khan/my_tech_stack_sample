@@ -56,11 +56,6 @@ init flags url key =
                     { url = url
                     , key = key
                     , route = route
-                    -- , user_model =
-                    --     { user_data = Nothing
-                    --     , user_todos = NotAsked
-                    --     , create_todo = { name = "" }
-                    --     }
                     , user_auth = user_auth
                     }
 
@@ -68,11 +63,6 @@ init flags url key =
                     { url = url
                     , key = key
                     , route = route
-                    -- , user_model =
-                    --     { user_data = Nothing
-                    --     , user_todos = NotAsked
-                    --     , create_todo = { name = "" }
-                    --     }
                     , user_auth = LoggedIn (Maybe.withDefault {token=""} flgs.token) Nothing Nothing 
                     }
 

@@ -116,6 +116,5 @@ type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , user_auth: UserAuth 
-    -- , user_model : UserModel
     , route : Maybe Route
     }
