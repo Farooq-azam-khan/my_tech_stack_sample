@@ -109,11 +109,13 @@ type alias UserModel =
 type UserAuth 
     = LoggedIn Token (Maybe UserData) (Maybe UserModel)
     | LoggedOut 
-    | Anonymous -- SignupUserForm LoginFormData
+    | Anonymous
+    | SignupUserAuth SignupUserForm
+    | LoginUserAuth LoginFormData
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
-    -- , token : MaybeToken
     , user_auth: UserAuth 
     , user_model : UserModel
     , route : Maybe Route
