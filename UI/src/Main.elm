@@ -52,12 +52,12 @@ init flags url key =
                     { url = url
                     , key = key
                     , route = parse routeParser url
-                    , token = Nothing
                     , user_model =
                         { user_data = Nothing
                         , user_todos = NotAsked
                         , create_todo = { name = "" }
                         }
+                    , user_auth = Anonymous
                     , signup_user = SignupUserForm "" ""
                     , login_user = LoginFormData "" ""
                     }
@@ -66,20 +66,22 @@ init flags url key =
                     { url = url
                     , key = key
                     , route = parse routeParser url
-                    , token = flgs.token
                     , user_model =
                         { user_data = Nothing
                         , user_todos = NotAsked
                         , create_todo = { name = "" }
                         }
+                    , user_auth = LoggedIn (Maybe.withDefault {token=""} flgs.token) Nothing Nothing 
                     , signup_user = SignupUserForm "" ""
                     , login_user = LoginFormData "" ""
                     }
 
         cmds =
             Cmd.batch
-                [ Maybe.map (\token -> get_user_data_request token) model.token
-                    |> Maybe.withDefault Cmd.none
+                [ case model.user_auth of 
+                    LoggedIn token _ _ -> 
+                        get_user_data_request token
+                    _ -> Cmd.none   
                 ]
     in
     ( model

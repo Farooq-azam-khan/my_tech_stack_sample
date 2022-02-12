@@ -106,11 +106,15 @@ type alias UserModel =
     , create_todo : CreateTodo
     }
 
-
+type UserAuth 
+    = LoggedIn Token (Maybe UserData) (Maybe UserModel)
+    | LoggedOut 
+    | Anonymous -- SignupUserForm LoginFormData
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
-    , token : MaybeToken
+    -- , token : MaybeToken
+    , user_auth: UserAuth 
     , user_model : UserModel
     , route : Maybe Route
     , signup_user : SignupUserForm

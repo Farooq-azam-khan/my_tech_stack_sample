@@ -119,8 +119,9 @@ update msg model =
 
             else
                 ( model
-                , case model.token of
-                    Just token ->
+                , case model.user_auth of -- model.token of
+                    LoggedIn token _ _ -> 
+                    -- Just token ->
                         case model.user_model.user_data of
                             Just user_data ->
                                 makeTodoRequest model.user_model.create_todo token user_data
@@ -128,23 +129,29 @@ update msg model =
                             Nothing ->
                                 get_user_data_request token
 
-                    Nothing ->
+                    -- Nothing ->
+                    _ ->
                         Cmd.none
                 )
 
         LoginResponseAction resp ->
             case resp of
                 Success maybe_tok ->
-                    ( { model | token = maybe_tok }
-                    , Cmd.batch
-                        [ save_token_to_local_storage maybe_tok
-                        , Nav.pushUrl model.key "/"
-                        , Maybe.map
-                            get_user_data_request
-                            model.token
-                            |> Maybe.withDefault Cmd.none
-                        ]
-                    )
+                    case model.user_auth of 
+                        LoggedIn _ _ _ -> 
+                            (model, Cmd.none)
+                        _ -> 
+                            ( { model | user_auth = LoggedIn (Maybe.withDefault {token=""} maybe_tok) Nothing Nothing }
+                            , Cmd.batch
+                                [ save_token_to_local_storage maybe_tok
+                                , Nav.pushUrl model.key "/"
+                                , case model.user_auth of 
+                                    LoggedIn token Nothing _ -> 
+                                        
+                                        get_user_data_request token
+                                    _ -> Cmd.none 
+                                ]
+                            )
 
                 _ ->
                     ( model, Cmd.none )
@@ -194,19 +201,19 @@ update msg model =
                                     { user_model | user_data = Just user }
                             in
                             ( { model | user_model = new_user_model }
-                            , case model.token of
-                                Just token ->
+                            , case model.user_auth of
+                                LoggedIn token _ _ ->
                                     get_todo_data_request token
 
-                                Nothing ->
+                                _ ->
                                     Cmd.none
                             )
 
                         Nothing ->
-                            ( { model | token = Nothing }, Cmd.none )
+                            ( model , Cmd.none )
 
                 _ ->
-                    ( { model | token = Nothing }, Cmd.none )
+                    ( model, Cmd.none )
 
         GetTodoDataResult resp ->
             let
@@ -268,10 +275,11 @@ update msg model =
 
         DeleteTodo todo_id ->
             ( model
-            , Maybe.map
-                (\token -> delete_user_todo token todo_id)
-                model.token
-                |> Maybe.withDefault Cmd.none
+            , case model.user_auth of 
+                LoggedIn token _ _ -> 
+                    
+                    delete_user_todo token todo_id
+                _ -> Cmd.none 
             )
 
         TodoDataDeletionResult resp ->
@@ -302,10 +310,10 @@ update msg model =
 
         UpdateTodoAction todo_id current_completed_value ->
             ( model
-            , Maybe.map
-                (\token -> update_todo_completion token todo_id (not current_completed_value))
-                model.token
-                |> Maybe.withDefault Cmd.none
+            , case model.user_auth of 
+                LoggedIn token _ _ -> 
+                    update_todo_completion token todo_id (not current_completed_value)
+                _ -> Cmd.none 
             )
 
         TodoDataUpdateResult resp ->
@@ -337,8 +345,8 @@ update msg model =
 
 home_route_change_update : Model -> ( Model, Cmd Msg )
 home_route_change_update model =
-    Maybe.map
-        (\token ->
+    case model.user_auth of     
+        LoggedIn token _ _ -> 
             let
                 user_model =
                     model.user_model
@@ -349,16 +357,14 @@ home_route_change_update model =
             ( { model | user_model = new_user_model }
             , get_todo_data_request token
             )
-        )
-        model.token
-        |> Maybe.withDefault ( model, Cmd.none )
+        
+        _ -> ( model, Cmd.none )
 
 
 logout_route_chage_update : Model -> ( Model, Cmd Msg )
 logout_route_chage_update model =
     ( { model
-        | token = Nothing
-        , user_model = { user_data = Nothing, user_todos = NotAsked, create_todo = { name = "" } }
+        | user_auth = Anonymous 
       }
     , Ports.logoutUser ()
     )

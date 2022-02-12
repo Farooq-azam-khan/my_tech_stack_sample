@@ -41,15 +41,15 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET} #myadminsecretkey
       HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET} #'{"type":"HS256", "key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "claims_format": "json"}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
-  ui:
-    build: ./UI
-    volumes:
-      - ./UI:/ui
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-      - graphql-engine
+  # ui: # error ing out for some reason (running locally)
+  #   build: ./UI
+  #   volumes:
+  #     - ./UI:/ui
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api
+  #     - graphql-engine
   # pgadmin:
   #   container_name: pgadmin
   #   image: dpage/pgadmin4

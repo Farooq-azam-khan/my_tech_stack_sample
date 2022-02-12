@@ -53,13 +53,15 @@ navbar_component model route =
             , nav
                 [ class "flex-col space-x-3 flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row"
                 ]
-                (case model.token of
-                    Just _ ->
+                (case model.user_auth of
+                    LoggedIn token _ _ -> 
+                    -- Just _ ->
                         [ active_route "Home" "home"
                         , inactive_route "Logout" "logout"
                         ]
 
-                    Nothing ->
+                    -- Nothing ->
+                    _ -> 
                         case route of
                             HomeR ->
                                 [ active_route "Home" "home"

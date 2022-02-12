@@ -40,11 +40,11 @@ viewPage model =
                             div [] [ text <| "todo: " ++ user_name ]
 
                         LoginR ->
-                            case model.token of
-                                Just _ ->
+                            case model.user_auth of
+                                LoggedIn _ _ _ ->
                                     logged_in_card
 
-                                Nothing ->
+                                _ ->
                                     div [] [ login_compnent <| model.login_user ]
 
                         LogoutR ->
@@ -61,8 +61,8 @@ viewPage model =
                                 ]
 
                         RegisterR ->
-                            case model.token of
-                                Just _ ->
+                            case model.user_auth of
+                                LoggedIn _ _ _ ->
                                     text ""
 
                                 _ ->

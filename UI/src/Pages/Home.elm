@@ -12,8 +12,9 @@ home_page : Model -> FilterTodoType -> Html Msg
 home_page model filter_todo =
     div
         [ class "max-w-2xl mx-auto" ]
-        [ case model.token of
-            Just _ ->
+        [ case model.user_auth of -- case model.token of
+            LoggedIn _ _ _ -> 
+            -- Just _ ->
                 div
                     []
                     [ div
@@ -48,7 +49,8 @@ home_page model filter_todo =
                             div [] [ p [] [ text "no todos" ] ]
                     ]
 
-            Nothing ->
+            _ -> 
+            -- Nothing ->
                 div
                     [ class "mt-60 flex items-center justify-between"
                     ]
