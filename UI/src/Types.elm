@@ -101,8 +101,7 @@ type alias CreateTodo =
 
 
 type alias UserModel =
-    { user_data : Maybe UserData
-    , user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
+    { user_todos : RemoteData (Graphql.Http.Error (List TodoData)) (List TodoData)
     , create_todo : CreateTodo
     }
 
@@ -117,8 +116,6 @@ type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , user_auth: UserAuth 
-    , user_model : UserModel
+    -- , user_model : UserModel
     , route : Maybe Route
-    , signup_user : SignupUserForm
-    , login_user : LoginFormData
     }

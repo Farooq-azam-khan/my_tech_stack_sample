@@ -42,38 +42,38 @@ subs _ =
 init : Json.Decode.Value -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
+        route = parse routeParser url
+        user_auth = 
+            case Maybe.withDefault ErrorR route of 
+                RegisterR -> 
+                    SignupUserAuth {username="", password=""}
+                LoginR -> 
+                    LoginUserAuth {username="", password=""}
+                _ -> Anonymous
         model =
             case InteropPorts.decodeFlags flags of
-                Err error ->
-                    let
-                        _ =
-                            Debug.log "error parsing flags" error
-                    in
+                Err _ ->
                     { url = url
                     , key = key
-                    , route = parse routeParser url
-                    , user_model =
-                        { user_data = Nothing
-                        , user_todos = NotAsked
-                        , create_todo = { name = "" }
-                        }
-                    , user_auth = Anonymous
-                    , signup_user = SignupUserForm "" ""
-                    , login_user = LoginFormData "" ""
+                    , route = route
+                    -- , user_model =
+                    --     { user_data = Nothing
+                    --     , user_todos = NotAsked
+                    --     , create_todo = { name = "" }
+                    --     }
+                    , user_auth = user_auth
                     }
 
                 Ok flgs ->
                     { url = url
                     , key = key
-                    , route = parse routeParser url
-                    , user_model =
-                        { user_data = Nothing
-                        , user_todos = NotAsked
-                        , create_todo = { name = "" }
-                        }
+                    , route = route
+                    -- , user_model =
+                    --     { user_data = Nothing
+                    --     , user_todos = NotAsked
+                    --     , create_todo = { name = "" }
+                    --     }
                     , user_auth = LoggedIn (Maybe.withDefault {token=""} flgs.token) Nothing Nothing 
-                    , signup_user = SignupUserForm "" ""
-                    , login_user = LoginFormData "" ""
                     }
 
         cmds =

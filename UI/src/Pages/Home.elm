@@ -13,7 +13,7 @@ home_page model filter_todo =
     div
         [ class "max-w-2xl mx-auto" ]
         [ case model.user_auth of -- case model.token of
-            LoggedIn _ _ _ -> 
+            LoggedIn _ _ (Just user_model) -> 
             -- Just _ ->
                 div
                     []
@@ -25,7 +25,7 @@ home_page model filter_todo =
                             , id "todo_name"
                             , placeholder "what would you like todo?"
                             , onInput UpdateTodoCreationName
-                            , value model.user_model.create_todo.name
+                            , value user_model.create_todo.name
                             , type_ "text"
                             ]
                             []
@@ -37,7 +37,7 @@ home_page model filter_todo =
                             [ text "Create TODO"
                             ]
                         ]
-                    , case model.user_model.user_todos of
+                    , case user_model.user_todos of
                         Success todos ->
                             if List.length todos == 0 then
                                 no_todos_component
