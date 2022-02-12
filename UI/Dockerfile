@@ -2,6 +2,11 @@
 FROM node:16
 
 WORKDIR /ui
+# install glob debs
+RUN npm i -g elm 
+RUN npm i -g tailwindcss 
+RUN npm i -g concurrently
+
 # Install dependencies 
 COPY package.json package-lock.json /ui/ 
 RUN npm install 
