@@ -21,7 +21,7 @@
 * [x] todo detail page
 * [x] mark todo as completed
 * [x] refactor 
-
+* [ ] a build script to transport all svg, png, jpg, etc assets to the build folder
 # Look Into
 * [ ] `elm-pages` [https://elm-pages.com/](https://elm-pages.com/)
 * [ ] `elm-ts-interop` [https://elm-ts-interop.com/](https://elm-ts-interop.com/)
