@@ -11,6 +11,7 @@
     "docker:elm": "elm-live -p 3000 --host=0.0.0.0 src/Main.elm --pushstate -- --debug --output=elm.js",
     "docker:tailwind": "npm run dev:tailwind",
     "watch:elm": "npm run dev:elm",
+    "watch:elm:admin": "elm-live -p 3001 --host=127.0.0.1 --start-page=admin_index.html src/AdminMain.elm --pushstate -- --debug --output=admin_elm.js", 
     "watch:tailwind": "npm run dev:tailwind",
     "build:elm": "elm make src/Main.elm --output=build/elm.js --optimize",
     "build:tailwind": "tailwindcss -i tailwind.css -o build/build.css --minify",
