@@ -108,3 +108,5 @@ apply metadata: `hasura metadata apply`
 * can use admin secret or use a dummy user for authorization bearer token   
 * potential idea for two elm frontend apps, 1 for admin and 1 for normal users 
 
+## Potential Ideas
+* [ ] an admin dashboard 
