@@ -34,8 +34,10 @@
   * elm-graphql to fetch graphql types meaning your backend will be synced to the frontend at all times. 
   * (not yet implemented) elm typescript interop in a way that allows you to extend javascript libraries on the client side safely 
 * easy routing in the frontend with elm url parser
-* global state 
+* global state (i.e. don't need a third party state library)
 * utility first styled components 
+* typescript interop with elm
+* admin / dashboard app fully integrated 
 
 Many of the features listed above are a pain to setup for a project and are eventually required by every project; however, it takes weeks to set it up. For that reason, I created this boilerplate so that the next time you have an idea, download this boilerplate, setup you database models and quickly connect the api to a frontend. The way it is setup with docker allows you to be flexible with the langauge you use on the frontned. I prefer functional based, type safe approach to programming which is why I chose elm. 
 
