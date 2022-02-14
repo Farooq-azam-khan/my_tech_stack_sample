@@ -56,7 +56,7 @@ For many other they might prefer a javascript based framework like react, vue, s
 * do not check in sensitive information 
 * do not use int ids for your routing eg. `todos/10`
   * make sure its a random uuid or a slug eg. `todos/asdf`
-  * this way hackers do not know any info at the database
+  * this way hackers do not know any sensative info at the database level
 
 
 # Hasura migrations and metadata workflow
