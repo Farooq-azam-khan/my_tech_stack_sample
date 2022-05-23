@@ -112,3 +112,4 @@ apply metadata: `hasura metadata apply`
 
 ## Potential Ideas
 * [ ] an admin dashboard 
+* [ ] integrate tauri as a desktop option for app development 
