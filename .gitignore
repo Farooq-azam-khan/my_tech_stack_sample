@@ -1,6 +1,7 @@
 # My ignores 
 build.css
 elm.js 
+admin_elm.js 
 # elm ts interop file codegen
 *.d.ts
 

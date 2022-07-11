@@ -12,8 +12,9 @@ home_page : Model -> FilterTodoType -> Html Msg
 home_page model filter_todo =
     div
         [ class "max-w-2xl mx-auto" ]
-        [ case model.token of
-            Just _ ->
+        [ case model.user_auth of -- case model.token of
+            LoggedIn _ _ (Just user_model) -> 
+            -- Just _ ->
                 div
                     []
                     [ div
@@ -24,7 +25,7 @@ home_page model filter_todo =
                             , id "todo_name"
                             , placeholder "what would you like todo?"
                             , onInput UpdateTodoCreationName
-                            , value model.user_model.create_todo.name
+                            , value user_model.create_todo.name
                             , type_ "text"
                             ]
                             []
@@ -36,7 +37,7 @@ home_page model filter_todo =
                             [ text "Create TODO"
                             ]
                         ]
-                    , case model.user_model.user_todos of
+                    , case user_model.user_todos of
                         Success todos ->
                             if List.length todos == 0 then
                                 no_todos_component
@@ -48,7 +49,8 @@ home_page model filter_todo =
                             div [] [ p [] [ text "no todos" ] ]
                     ]
 
-            Nothing ->
+            _ -> 
+            -- Nothing ->
                 div
                     [ class "mt-60 flex items-center justify-between"
                     ]

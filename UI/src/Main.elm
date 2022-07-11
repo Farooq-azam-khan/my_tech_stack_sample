@@ -42,40 +42,36 @@ subs _ =
 init : Json.Decode.Value -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
+        route = parse routeParser url
+        user_auth = 
+            case Maybe.withDefault ErrorR route of 
+                RegisterR -> 
+                    SignupUserAuth {username="", password=""}
+                LoginR -> 
+                    LoginUserAuth {username="", password=""}
+                _ -> Anonymous
         model =
             case InteropPorts.decodeFlags flags of
                 Err _ ->
                     { url = url
                     , key = key
-                    , route = parse routeParser url
-                    , token = Nothing
-                    , user_model =
-                        { user_data = Nothing
-                        , user_todos = NotAsked
-                        , create_todo = { name = "" }
-                        }
-                    , signup_user = SignupUserForm "" ""
-                    , login_user = LoginFormData "" ""
+                    , route = route
+                    , user_auth = user_auth
                     }
 
                 Ok flgs ->
                     { url = url
                     , key = key
-                    , route = parse routeParser url
-                    , token = flgs.token
-                    , user_model =
-                        { user_data = Nothing
-                        , user_todos = NotAsked
-                        , create_todo = { name = "" }
-                        }
-                    , signup_user = SignupUserForm "" ""
-                    , login_user = LoginFormData "" ""
+                    , route = route
+                    , user_auth = LoggedIn (Maybe.withDefault {token=""} flgs.token) Nothing Nothing 
                     }
 
         cmds =
             Cmd.batch
-                [ Maybe.map (\token -> get_user_data_request token) model.token
-                    |> Maybe.withDefault Cmd.none
+                [ case model.user_auth of 
+                    LoggedIn token _ _ -> 
+                        get_user_data_request token
+                    _ -> Cmd.none   
                 ]
     in
     ( model

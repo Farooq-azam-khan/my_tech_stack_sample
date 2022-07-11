@@ -34,8 +34,10 @@
   * elm-graphql to fetch graphql types meaning your backend will be synced to the frontend at all times. 
   * (not yet implemented) elm typescript interop in a way that allows you to extend javascript libraries on the client side safely 
 * easy routing in the frontend with elm url parser
-* global state 
+* global state (i.e. don't need a third party state library)
 * utility first styled components 
+* typescript interop with elm
+* admin / dashboard app fully integrated 
 
 Many of the features listed above are a pain to setup for a project and are eventually required by every project; however, it takes weeks to set it up. For that reason, I created this boilerplate so that the next time you have an idea, download this boilerplate, setup you database models and quickly connect the api to a frontend. The way it is setup with docker allows you to be flexible with the langauge you use on the frontned. I prefer functional based, type safe approach to programming which is why I chose elm. 
 
@@ -54,7 +56,7 @@ For many other they might prefer a javascript based framework like react, vue, s
 * do not check in sensitive information 
 * do not use int ids for your routing eg. `todos/10`
   * make sure its a random uuid or a slug eg. `todos/asdf`
-  * this way hackers do not know any info at the database
+  * this way hackers do not know any sensative info at the database level
 
 
 # Hasura migrations and metadata workflow
@@ -108,3 +110,7 @@ apply metadata: `hasura metadata apply`
 * can use admin secret or use a dummy user for authorization bearer token   
 * potential idea for two elm frontend apps, 1 for admin and 1 for normal users 
 
+## Potential Ideas
+* [ ] an admin dashboard 
+* [ ] integrate tauri as a desktop option for app development 
+* [ ] auth0 for third party login

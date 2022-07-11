@@ -40,12 +40,13 @@ viewPage model =
                             div [] [ text <| "todo: " ++ user_name ]
 
                         LoginR ->
-                            case model.token of
-                                Just _ ->
+                            case model.user_auth of
+                                LoggedIn _ _ _ ->
                                     logged_in_card
 
-                                Nothing ->
-                                    div [] [ login_compnent <| model.login_user ]
+                                LoginUserAuth login_form ->
+                                    div [] [ login_compnent <| login_form ]
+                                _ -> text ""
 
                         LogoutR ->
                             div
@@ -61,12 +62,15 @@ viewPage model =
                                 ]
 
                         RegisterR ->
-                            case model.token of
-                                Just _ ->
+                            case model.user_auth of
+                                LoggedIn _ _
+                                 _ ->
                                     text ""
 
-                                _ ->
-                                    div [] [ register_compnent <| model.signup_user ]
+                                SignupUserAuth signup_from ->
+                                    div [] [ register_compnent  signup_from ]
+
+                                _ -> text ""
 
                         ErrorR ->
                             div [] [ text <| "error occured trying to get to route: " ++ Url.toString model.url ]
