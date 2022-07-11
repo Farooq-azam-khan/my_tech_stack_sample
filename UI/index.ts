@@ -1,4 +1,6 @@
-/// <reference path="./src/index.d.ts" />
+import './src/index.d.ts'
+import { Elm } from './src/Main.elm'
+import './tailwind.css'
 
 const APP_NAME = 'TECH-STACK'
 
@@ -11,19 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const token_str = sessionStorage.getItem(`${APP_NAME}_token`);
     const token_json = token_str ? JSON.parse(token_str) : null;
     const app = Elm.Main.init({
-        // @ts-ignore
         node: node,
-        // @ts-ignore
         flags: { os: getOsName(), token: token_json }
     })
-    // app.ports.interopFromElm
 
-    // @ts-ignore
-    app.ports.storeTokenData.subscribe(token => {
+    app.ports.storeTokenData.subscribe((token: any) => {
         sessionStorage.setItem(`${APP_NAME}_token`, JSON.stringify(token));
     })
 
-    // @ts-ignore
     app.ports.logoutUser.subscribe(() => {
         console.log("Logging out user")
         sessionStorage.removeItem(`${APP_NAME}_token`);

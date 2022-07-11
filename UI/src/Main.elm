@@ -44,11 +44,7 @@ init flags url key =
     let
         model =
             case InteropPorts.decodeFlags flags of
-                Err error ->
-                    let
-                        _ =
-                            Debug.log "error parsing flags" error
-                    in
+                Err _ ->
                     { url = url
                     , key = key
                     , route = parse routeParser url
