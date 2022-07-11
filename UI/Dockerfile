@@ -8,4 +8,4 @@ RUN npm install
 EXPOSE 3000 
 COPY .  /ui/
 RUN npm run elm:ts:generate_types
-CMD ["npm", "run", "dev:elm"]
+CMD ["npm", "start"]
