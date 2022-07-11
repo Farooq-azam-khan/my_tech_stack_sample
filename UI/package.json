@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "vite",
+    "start": "vite --host 0.0.0.0",
     "dev": "concurrently npm:watch:*",
-    "dev:elm": "elm-live -p 3000 src/Main.elm --pushstate -- --debug --output=elm.js",
+    "dev:elm": "elm-live --host=0.0.0.0 -p 3000 src/Main.elm --pushstate -- --debug --output=elm.js",
     "dev:tailwind": "tailwindcss -i tailwind.css -o build.css --watch",
-    "docker:elm": "elm-live -p 3000 --host=0.0.0.0 src/Main.elm --pushstate -- --debug --output=elm.js",
     "build:elm": "elm make src/Main.elm --output=build/elm.js --optimize",
     "build:tailwind": "tailwindcss -i tailwind.css -o build/build.css --minify",
     "build": "mkdir build & cp index.html build & npm run build:tailwind & npm run build:elm",
