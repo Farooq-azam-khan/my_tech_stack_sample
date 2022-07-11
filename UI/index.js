@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // @ts-ignore
         node: node,
         // @ts-ignore
-        flags: { os: getOsName(), token: token_json } // { 'token': token_json }
+        flags: { os: getOsName(), token: token_json }
     })
     // app.ports.interopFromElm
 
