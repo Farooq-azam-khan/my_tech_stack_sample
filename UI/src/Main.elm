@@ -42,14 +42,20 @@ subs _ =
 init : Json.Decode.Value -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
-        route = parse routeParser url
-        user_auth = 
-            case Maybe.withDefault ErrorR route of 
-                RegisterR -> 
-                    SignupUserAuth {username="", password=""}
-                LoginR -> 
-                    LoginUserAuth {username="", password=""}
-                _ -> Anonymous
+        route =
+            parse routeParser url
+
+        user_auth =
+            case Maybe.withDefault ErrorR route of
+                RegisterR ->
+                    SignupUserAuth { username = "", password = "" }
+
+                LoginR ->
+                    LoginUserAuth { username = "", password = "" }
+
+                _ ->
+                    Anonymous
+
         model =
             case InteropPorts.decodeFlags flags of
                 Err _ ->
@@ -63,15 +69,17 @@ init flags url key =
                     { url = url
                     , key = key
                     , route = route
-                    , user_auth = LoggedIn (Maybe.withDefault {token=""} flgs.token) Nothing Nothing 
+                    , user_auth = LoggedIn (Maybe.withDefault { token = "" } flgs.token) Nothing Nothing
                     }
 
         cmds =
             Cmd.batch
-                [ case model.user_auth of 
-                    LoggedIn token _ _ -> 
+                [ case model.user_auth of
+                    LoggedIn token _ _ ->
                         get_user_data_request token
-                    _ -> Cmd.none   
+
+                    _ ->
+                        Cmd.none
                 ]
     in
     ( model
