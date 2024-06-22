@@ -46,11 +46,8 @@ For many other they might prefer a javascript based framework like react, vue, s
 ### Cons / future features
 * I have not considered the deployment aspects of this. 
 * I assume you could use heroku to deploy the database, hasura endpoint, and api and use github pages, aws s3, vercel, etc. to deploy a built version of the UI. 
-  * Ask you local devops engineer about the production side of this.
-  * Infrastructure as code is also another option here. I've heard good things about Palumi, and Teraform. 
 * security in the sense of clean code is addressed; however, security is the aspects of production also is lacking here. Hide the jwt secrets, the hasura admin keys and the postgres database string config. Checkout the following files: `docker-compose.yaml`, `api/main.py`, `hasura/config.yaml`
-* If SEO or SSR is a necessary component, good luck. I have given it zero considerations. I think NextJs will be a good help for this. 
-
+* not SEO or SSR
 
 ### Do as I say not as I do
 * do not check in sensitive information 
